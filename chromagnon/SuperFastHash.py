@@ -66,7 +66,7 @@ def superFastHash(data):
         hash ^= (hash << 11) & 0xFFFFFFFF
         hash += hash >> 17
     elif rem == 1:
-        hash += int(binascii.hexlify(data[0]), 16)
+        hash += int(binascii.hexlify(bytes(data[0], 'utf-8')), 16)
         hash ^= (hash << 10) & 0xFFFFFFFF
         hash += hash >> 1
 
