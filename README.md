@@ -15,8 +15,7 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 * **Session...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
 * **Tab...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
 
-## Requirements (tbd)
-* Python 2.7
+## Requirements 
 * Updates to Python 3 in progress - Squiblydoo
 
 ## Remarks
