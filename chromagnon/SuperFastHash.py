@@ -37,7 +37,7 @@ import sys
 
 def get16bits(data):
     """Returns the first 16bits of a string"""
-    return int(binascii.hexlify(data[1::-1]), 16)
+    return int(binascii.hexlify(bytes(data[1::-1], 'utf-8')), 16)
 
 def superFastHash(data):
     hash = length = len(data)
@@ -59,7 +59,7 @@ def superFastHash(data):
     if rem == 3:
         hash += get16bits (data)
         hash ^= (hash << 16) & 0xFFFFFFFF
-        hash ^= (int(binascii.hexlify(data[2]), 16) << 18) & 0xFFFFFFFF
+        hash ^= (int(binascii.hexlify(bytes(data[2] , 'utf-8')), 16) << 18) & 0xFFFFFFFF
         hash += hash >> 11
     elif rem == 2:
         hash += get16bits (data)

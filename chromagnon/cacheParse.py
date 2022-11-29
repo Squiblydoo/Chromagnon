@@ -36,9 +36,10 @@ import gzip
 import os
 import struct
 import sys
+from pathlib import Path
 
-import chromagnon.csvOutput
-import chromagnon.SuperFastHash
+import chromagnon.csvOutput as csvOutput
+import chromagnon.SuperFastHash as SuperFastHash
 
 from chromagnon.cacheAddress import CacheAddress
 from chromagnon.cacheBlock import CacheBlock
@@ -52,16 +53,16 @@ def parse(path, urls=None):
     or find out if the given list of urls is in the cache. If yes it
     return a list of the corresponding entries.
     """
-    # Verifying that the path end with / (What happen on windows?)
-    path = os.path.abspath(path) + '/'
+    #Set the path using Path. Path should resolve any OS dependent directories.
+    path = Path(path) 
 
-    cacheBlock = CacheBlock(path + "index")
+    cacheBlock = CacheBlock(Path(path , "index"))
 
     # Checking type
     if cacheBlock.type != CacheBlock.INDEX:
         raise Exception("Invalid Index File")
 
-    index = open(path + "index", 'rb')
+    index = open(Path(path, "index"), 'rb')
 
     # Skipping Header
     index.seek(92*4)
@@ -91,8 +92,8 @@ def parse(path, urls=None):
             addr = struct.unpack('I', index.read(4))[0]
             # Checking if the address is initialized (i.e. used)
             if addr & 0x80000000 == 0:
-                print >> sys.stderr, \
-                      "\033[32m%s\033[31m is not in the cache\033[0m" % url
+                print(sys.stderr, \
+                      "%s is not in the cache." % url)
 
             # Follow the chained list in the bucket
             else:

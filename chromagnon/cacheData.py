@@ -34,8 +34,9 @@ Parse the HTTP header if asked.
 import re
 import shutil
 import struct
+from pathlib import Path
 
-import chromagnon.cacheAddress
+import chromagnon.cacheAddress as cacheAddress
 
 class CacheData():
     """
@@ -61,10 +62,10 @@ class CacheData():
            self.address.blockType != cacheAddress.CacheAddress.SEPARATE_FILE:
             # Getting raw data
             string = ""
-            block = open(self.address.path + self.address.fileSelector, 'rb')
+            block = open(Path(self.address.path, self.address.fileSelector), 'rb')
             block.seek(8192 + self.address.blockNumber*self.address.entrySize)
             for _ in range(self.size):
-                string += struct.unpack('c', block.read(1))[0]
+                string += str(struct.unpack('c', block.read(1))[0])
             block.close()
 
             # Finding the beginning of the request
@@ -96,7 +97,7 @@ class CacheData():
                         filename)
         else:
             output = open(filename, 'wb')
-            block = open(self.address.path + self.address.fileSelector, 'rb')
+            block = open(Path(self.address.path, self.address.fileSelector), 'rb')
             block.seek(8192 + self.address.blockNumber*self.address.entrySize)
             output.write(block.read(self.size))
             block.close()
@@ -104,7 +105,7 @@ class CacheData():
 
     def data(self):
         """Returns a string representing the data"""
-        block = open(self.address.path + self.address.fileSelector, 'rb')
+        block = open(Path(self.address.path, self.address.fileSelector), 'rb')
         block.seek(8192 + self.address.blockNumber*self.address.entrySize)
         data = block.read(self.size).decode('utf-8')
         block.close()

@@ -33,6 +33,7 @@ for design details
 """
 
 import struct
+from pathlib import Path
 
 class CacheBlock():
     """
@@ -50,7 +51,7 @@ class CacheBlock():
         """
         Parse the header of a cache file
         """
-        header = open(filename, 'rb')
+        header = open(Path(filename), 'rb')
 
         # Read Magic Number
         magic = struct.unpack('I', header.read(4))[0]

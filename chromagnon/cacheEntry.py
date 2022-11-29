@@ -34,9 +34,10 @@ for design details
 
 import datetime
 import struct
+from pathlib import Path
 
-import chromagnon.cacheAddress
-import chromagnon.cacheData
+import chromagnon.cacheAddress as cacheAddress
+import chromagnon.cacheData as cacheData
 
 class CacheEntry():
     """
@@ -51,7 +52,7 @@ class CacheEntry():
         Parse a Chrome Cache Entry at the given address
         """
         self.httpHeader = None
-        block = open(address.path + address.fileSelector, 'rb')
+        block = open(Path(address.path , address.fileSelector), 'rb')
 
         # Going to the right entry
         block.seek(8192 + address.blockNumber*address.entrySize)
