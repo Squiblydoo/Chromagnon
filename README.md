@@ -1,7 +1,7 @@
 Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 
 ## Tools
-* `chromagnonHistory.py` parses **Chrome History** file
+* `chromagnonHistory.py` parses **Chrome History** file - [learn more]<https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonHistory-=-chromagnonHistory.py>
 * `chromagnonCache.py` parses **Cache_Data** directory
 * `chromagnonVisitedLinks.py` can verify if urls are in Chrome's **Visited Links** file
 * `chromagnonDownload.py` parses **History** file for downloads
