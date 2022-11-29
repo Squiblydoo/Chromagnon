@@ -5,12 +5,15 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 * `chromagnonCache.py` parses **Cache_Data** directory ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonCache-=-chromagnonCache.py)
 * `chromagnonVisitedLinks.py` can verify if urls are in Chrome's **Visited Links** file ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonVisitedLinks-=-chromagnonVisitedLinks.py)
 * `chromagnonDownload.py` parses **History** file for downloads ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonDownload-=-chromagnonDownload.py)
-    * This requires a path to the user's History file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* `chromagnonSession.py` parses **Session_...** files 
+* `chromagnonTab.py` parses **Tab_...** files
 
 ## Files for analysis are located as follows
 * User's **Hisotry** file is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
 * **Visited Links** file is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
-* **Cache_Data** directory is located at "C:\Users\Karol\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
+* **Cache_Data** directory is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
+* **Session...** files are located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+* **Tab...** files are located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
 
 ## Requirements (tbd)
 * Python 2.7
