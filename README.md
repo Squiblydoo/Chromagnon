@@ -18,7 +18,7 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 ## Requirements 
 * Updates to Python 3 in progress - Squiblydoo
 
-## Remarks
+## Remarks from original project - I don't know if they are true or not
 * Most of the code is Endianness dependant and tested only on little endian hosts
 * The code is alignment dependant. If Chrome was compiled with custom alignment flags, it probably won't work.
 
