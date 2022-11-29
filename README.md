@@ -9,11 +9,11 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 * `chromagnonTab.py` parses **Tab_...** files
 
 ## Files for analysis are located as follows
-* User's **Hisotry** file is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
-* **Visited Links** file is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
-* **Cache_Data** directory is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
-* **Session...** files are located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
-* **Tab...** files are located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+* User's **Hisotry** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* **Visited Links** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
+* **Cache_Data** directory is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
+* **Session...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+* **Tab...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
 
 ## Requirements (tbd)
 * Python 2.7
