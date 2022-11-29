@@ -33,6 +33,7 @@ This module parses SNSS tab commands used to store session states in chrome
 import datetime
 import struct
 from io import StringIO
+from io import BytesIO 
 import sys
 
 import chromagnon.pickle as pickle
@@ -52,8 +53,8 @@ def parse(commandList):
     output = []
 
     for command in commandList:
-        if TYPE_DICT.has_key(str(command.idType)):
-            content = StringIO.StringIO(command.content)
+        if str(command.idType) in TYPE_DICT.keys():
+            content = BytesIO(command.content)
             commandClass = sys.modules[__name__].__dict__.get(\
                            TYPE_DICT[str(command.idType)])
             output.append(commandClass(content))
