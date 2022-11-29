@@ -6,8 +6,9 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 * [ChromagnonVisitedLinks](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonVisitedLinks-=-chromagnonVisitedLinks.py) can verify if urls are in **Chrome Visited Links** file
 * [ChromagnonDownload](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonDownload-=-chromagnonDownload.py) parses **Chrome Downloaded Files** database
 
-## Requirements
+## Requirements (tbd)
 * Python 2.7
+* Updates to Python 3 in progress - Squiblydoo
 
 ## Remarks
 * Most of the code is Endianness dependant and tested only on little endian hosts
@@ -18,10 +19,14 @@ I am working on reverse engineering SSNS file format : [see this page](https://g
 
 ## Tests
 Following cases have been tested with success
+From main fork:
 * Chromagnon on FreeBSD 9.0 amd64 parsing file from Windows 7 64bits (Chrome 20)
 * Chromagnon on FreeBSD 9.0 amd64 parsing file from Linux Mint 12 amd64 (Chrome 18)
 * Chromagnon on FreeBSD 9.0 amd64 parsing file from FreeBSD 9.0 amd64 (Chrome 15)
 * Chromagnon on Arch Linux x86_64 parsing file from Arch Linux x86_64 (Chrome 20)
+
+From new testing:
+* ChromagnonHistory on Windows 10 amd64 parsing history file from Windows 10 64 bit (Chrome Build 107)
 
 Help is welcome to test Chromagnon on other plateforms.
 
