@@ -1,15 +1,16 @@
 Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 
 ## Tools
-* chromagnonHistory.py parses **Chrome History** file
-    * This requires a path to the user's Hisotry file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
-* chromagnonCache.py parses **Chrome Cache** files
-    * This requires a path to the user's Cache_Data "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
-* chromagnonVisitedLinks.py can verify if urls are in **Chrome Visited Links** file
-    * The Visited Links file is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
-* chromagnonDownload.py parses **Chrome Downloaded Files** database
-    * This requires a path to the user's Hisotry file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* `chromagnonHistory.py` parses **Chrome History** file
+* `chromagnonCache.py` parses **Cache_Data** directory
+* `chromagnonVisitedLinks.py` can verify if urls are in Chrome's **Visited Links** file
+* `chromagnonDownload.py` parses **History** file for downloads
+    * This requires a path to the user's History file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
 
+##Files for analysis are located as follows
+* User's Hisotry file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* The Visited Links file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
+* 
 ## Requirements (tbd)
 * Python 2.7
 * Updates to Python 3 in progress - Squiblydoo
