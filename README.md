@@ -7,7 +7,7 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 * `chromagnonDownload.py` parses **History** file for downloads
     * This requires a path to the user's History file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
 
-##Files for analysis are located as follows
+## Files for analysis are located as follows
 * User's Hisotry file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
 * The Visited Links file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
 * 
