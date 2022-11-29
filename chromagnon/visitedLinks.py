@@ -33,7 +33,7 @@ Reverse engineered from
   chrome/browser/visitedlink/visitedlink_*
 """
 
-import md5
+import hashlib
 import struct
 import sys
 
@@ -64,7 +64,7 @@ def isVisited(path, urls):
         salt += struct.unpack('c', f.read(1))[0]
 
     for url in urls:
-        fingerprint = md5.new()
+        fingerprint = hashlib.md5()
         fingerprint.update(salt)
         fingerprint.update(url)
         digest = fingerprint.hexdigest()
