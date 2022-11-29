@@ -23,7 +23,7 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 ## Work In Progress
 The original creator was working on reverse engineering SSNS file format : [see this page](https://github.com/JRBANCEL/Chromagnon/wiki/Reverse-Engineering-SSNS-Format) for details. Will this fork include SSNS file parsing? Who knows! I hope it will at some point.
 
-I (Squiblydoo) am testing each of the tools and am testing the functionality of each. There are currently some issues with chromagnonCache and chromagnonVisitedLinks. 
+I (Squiblydoo) am testing each of the tools and am testing the functionality of each. There are currently some issues with chromagnonCache and chromagnonVisitedLinks: chromagnonCache can print the cache to file, but it currently has issues when the user attempts to search for one url within the cache. The issue may be due to "SuperFastHash" with some of my band-aid fixes or it may be due to changes made by Chrome in the last 10 years. 
 
 ## Tests
 Scripts are in the process of being updated and tested.
