@@ -39,9 +39,9 @@ def main():
     parser = argparse.ArgumentParser(
              formatter_class=argparse.RawDescriptionHelpFormatter,
              description=textwrap.dedent('''
-\033[32mChromagnon Chrome Cache Parser\033[0m
+[Chromagnon Chrome Cache Parser]
 
-\033[4mTwo input methods\033[0m
+[Two input methods]
    1) A list of urls (usefull if you want to analyse only know urls).
       The entry corresponding to the url is found in the hash table,
       so it is fast.
@@ -49,16 +49,16 @@ def main():
       an exhaustive idea of what is in the cache. Can be slow if the
       cache has numerous entries.
 
-\033[4mThree output methods\033[0m
+[Three output methods]
    1) Terminal output. Displays main details of each cache entry.
       Stderr is used for error messages.
    2) Export to files. The entries are exported to the given directory
-      (specified with \033[1m-o\033[0m option). It is browsable with a web browser.
+      (specified with -o option). It is browsable with a web browser.
    3) Output a csv file to terminal compliant with log2timeline.
-      \033[1m-l2t\033[0m flag.
+      -l2t flag.
              '''),
              epilog=textwrap.dedent('''
-\033[4mExamples\033[0m
+[Examples]
     - Export the whole cache to browse it
 
      > python chromagnonCache.py ~/.cache/chromium/Default/Cache/ -o /tmp/export
@@ -94,8 +94,8 @@ def main():
             chromagnon.cacheParse.exportTol2t(cache)
         else:
             for entry in cache:
-                print entry
-                print "-"*80
+                print(entry)
+                print("-"*80)
     else:
         chromagnon.cacheParse.exportToHTML(cache, args.o)
 

@@ -44,20 +44,20 @@ def main():
     parser = argparse.ArgumentParser(
                 formatter_class=argparse.RawDescriptionHelpFormatter,
                 description=textwrap.dedent('''
-\033[32mChromagnon Chrome Download Parser\033[0m
+[Chromagnon Chrome Download Parser]
 
-\033[4mInput File\033[0m
+[Input File]
     The input file of this program is the Chrome history file. It is a simple
     SQLite3 file. It's usual name is 'History'.
 
-\033[4mOutput Format\033[0m
+[Output Format]
     Four output formats are available. csv and json is what you expect to be.
     Classical is a format where fields are separated by a \\t and column is a
     format where every fields are displayed in columns. You can specify the
     format using the -f flags. Moreover, the delimiter can be change with -d
     flag.
 
-\033[4mColumn Selection\033[0m
+[Column Selection]
     To select which field to display, use the -c flag with the following options
         st : Start Time
         rb : Received Bytes
