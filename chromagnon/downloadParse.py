@@ -44,15 +44,15 @@ def parse(filename, urlLength):
     # Connecting to the DB
     try:
         history = sqlite3.connect(filename)
-    except sqlite3.Error, error:
-        print "==> Error while opening the history file !"
-        print "==> Details :", error.message
+    except sqlite3.Error as error:
+        print("==> Error while opening the history file !")
+        print("==> Details :", error.message)
         sys.exit("==> Exiting...")
 
     # Retrieving all useful data
     result = history.execute("SELECT id, \
-                              full_path, \
-                              url, \
+                              target_path, \
+                              tab_url, \
                               start_time, \
                               received_bytes, \
                               total_bytes, \
@@ -100,4 +100,4 @@ class DownloadEntry(object):
 
     def columnToStr(self, column):
         """Returns column content specified by argument"""
-        return unicode(self.__getattribute__(DownloadEntry.COLUMN_STR[column]))
+        return str(self.__getattribute__(DownloadEntry.COLUMN_STR[column]))
