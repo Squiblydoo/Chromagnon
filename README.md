@@ -1,10 +1,14 @@
 Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 
 ## Tools
-* [ChromagnonHistory](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonHistory-=-chromagnonHistory.py) parses **Chrome History** file
-* [ChromagnonCache](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonCache-=-chromagnonCache.py) parses **Chrome Cache** files
-* [ChromagnonVisitedLinks](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonVisitedLinks-=-chromagnonVisitedLinks.py) can verify if urls are in **Chrome Visited Links** file
-* [ChromagnonDownload](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonDownload-=-chromagnonDownload.py) parses **Chrome Downloaded Files** database
+* chromagnonHistory.py parses **Chrome History** file
+    * This requires a path to the user's Hisotry file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* chromagnonCache.py parses **Chrome Cache** files
+    * This requires a path to the user's Cache_Data "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
+* chromagnonVisitedLinks.py can verify if urls are in **Chrome Visited Links** file
+    * The Visited Links file is located at "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
+* chromagnonDownload.py parses **Chrome Downloaded Files** database
+    * This requires a path to the user's Hisotry file "C:\Users\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
 
 ## Requirements (tbd)
 * Python 2.7
