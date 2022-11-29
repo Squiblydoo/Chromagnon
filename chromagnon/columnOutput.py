@@ -44,4 +44,4 @@ def columnOutput(queryResult, separator=' '):
     string = (''.join(["%%-%ds%s" % (x, separator) for x in size]))\
                  [:-len(separator)]
     for line in queryResult:
-        print string % tuple(line)
+        print(string % tuple(line))

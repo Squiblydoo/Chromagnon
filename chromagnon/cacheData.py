@@ -35,7 +35,7 @@ import re
 import shutil
 import struct
 
-import cacheAddress
+import chromagnon.cacheAddress
 
 class CacheData():
     """

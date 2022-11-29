@@ -37,13 +37,13 @@ import os
 import struct
 import sys
 
-import csvOutput
-import SuperFastHash
+import chromagnon.csvOutput
+import chromagnon.SuperFastHash
 
-from cacheAddress import CacheAddress
-from cacheBlock import CacheBlock
-from cacheData import CacheData
-from cacheEntry import CacheEntry
+from chromagnon.cacheAddress import CacheAddress
+from chromagnon.cacheBlock import CacheBlock
+from chromagnon.cacheData import CacheData
+from chromagnon.cacheEntry import CacheEntry
 
 
 def parse(path, urls=None):

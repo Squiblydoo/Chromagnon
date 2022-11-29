@@ -56,14 +56,14 @@ class DatetimeAction(argparse.Action):
                 # Try second format
                 value = datetime.datetime.strptime(values, "%m/%d/%Y")
             except ValueError:
-                print >> sys.stderr, "Invalid datetime format !"
+                print(sys.stderr, "Invalid datetime format !")
                 sys.exit(-1)
         setattr(namespace, self.dest, value)
 
 def main():
     # Dirty !!!!!!!!!!!
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+    #reload(sys)
+    ##sys.setdefaultencoding('utf-8')
     # TODO
 
 
@@ -100,7 +100,7 @@ def main():
         cc : Is Present in the Cache (Need to specify cache directory via -cache)
              '''))
     parser.add_argument("-s", "-start", action=DatetimeAction,
-                        default=datetime.datetime(1601, 01, 01),
+                        default=datetime.datetime(1601, 1, 1),
                         help="Low end of the time window : 'm/d/Y H:M:S' or "
                         "'m/d/Y'")
     parser.add_argument("-e", "-end", action=DatetimeAction,
@@ -126,9 +126,9 @@ def main():
 
     # Getting data
     if "cc" in args.c and not args.cache:
-        print >> sys.stderr, \
+        print( sys.stderr, \
                  "\033[31mIf you want to use 'cc' column you must specify the"\
-                 "cache directory with -cache flag\033[0m"
+                 "cache directory with -cache flag\033[0m")
         parser.print_help()
         sys.exit(-1)
     elif "cc" in args:

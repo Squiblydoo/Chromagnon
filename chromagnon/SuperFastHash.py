@@ -84,4 +84,4 @@ def superFastHash(data):
     return hash
 
 if __name__ == "__main__":
-    print "%08x"%superFastHash(sys.argv[1])
+    print("%08x"%superFastHash(sys.argv[1]))

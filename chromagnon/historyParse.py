@@ -36,7 +36,7 @@ import re
 import sqlite3
 import sys
 
-import cacheParse
+import chromagnon.cacheParse
 
 def parse(filename, start, end, checkCache, cachePath, urlLength):
     """
@@ -50,9 +50,9 @@ def parse(filename, start, end, checkCache, cachePath, urlLength):
     # Connecting to the DB
     try:
         history = sqlite3.connect(filename)
-    except sqlite3.Error, error:
-        print "==> Error while opening the history file !"
-        print "==> Details :", error.message
+    except sqlite3.Error as error:
+        print("==> Error while opening the history file !")
+        print("==> Details :", error.message)
         sys.exit("==> Exiting...")
 
     reference = datetime.datetime(1601, 1, 1)
@@ -161,15 +161,15 @@ class HistoryEntry(object):
                     break
 
     def toStr(self):
-        return [unicode(self.visitTime),\
-                unicode(self.fromVisit),\
-                unicode(self.transition),\
-                unicode(self.url),\
-                unicode(self.title),\
-                unicode(self.visitCount),\
-                unicode(self.typedCount),\
-                unicode(self.lastVisitTime)]
+        return [str(self.visitTime),\
+                str(self.fromVisit),\
+                str(self.transition),\
+                str(self.url),\
+                str(self.title),\
+                str(self.visitCount),\
+                str(self.typedCount),\
+                str(self.lastVisitTime)]
 
     def columnToStr(self, column):
         """Returns column content specified by argument"""
-        return unicode(self.__getattribute__(HistoryEntry.COLUMN_STR[column]))
+        return str(self.__getattribute__(HistoryEntry.COLUMN_STR[column]))

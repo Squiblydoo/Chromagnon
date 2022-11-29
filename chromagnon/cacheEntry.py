@@ -35,8 +35,8 @@ for design details
 import datetime
 import struct
 
-import cacheAddress
-import cacheData
+import chromagnon.cacheAddress
+import chromagnon.cacheData
 
 class CacheEntry():
     """

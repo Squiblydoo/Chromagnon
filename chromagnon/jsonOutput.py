@@ -37,4 +37,4 @@ def jsonOutput(queryResult, separator=''):
     Display the data separated in JSON
     """
 
-    print json.JSONEncoder().encode(queryResult)
+    print(json.JSONEncoder().encode(queryResult))
