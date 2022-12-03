@@ -1,4 +1,4 @@
-Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
+Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensics.
 
 ## Tools
 * `chromagnonHistory.py` parses **Chrome History** file ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonHistory-=-chromagnonHistory.py)
