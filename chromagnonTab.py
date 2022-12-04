@@ -26,14 +26,41 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import argparse
 import sys
+import textwrap
 
 import chromagnon.SNSSParse
 import chromagnon.tabParse
 
 def main():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent('''
+[Chromagnon Chrome Tab Parser]
+
+[Input File]
+    The input file of this program is a Chrome Tab file.
+    It is encoded and the usual names are "Current Tabs" and
+    "Tabs_..." whereas the underscore is followed with numerical values.
+
+[Output Format]
+    Current output is raw ordering of Tab data. Other formats to come.
+
+        ''')
+    )
+    parser.add_argument("filename", help="Path to Tabs file", action='store',
+        type=str )
+    args = parser.parse_args()
+
+
+    # Getting Data
     snss = chromagnon.SNSSParse.parse(sys.argv[1])
+
+    # Parse Retrived Data
     tabCommand = chromagnon.tabParse.parse(snss)
+
+    # Print data based on Tab Commands.
     for command in tabCommand:
         print(command)
 

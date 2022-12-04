@@ -47,10 +47,11 @@ def main():
     values.
 
 [Output Format]
-    Current output is raw ordering of Session data.
+    Current output is raw ordering of Session data. Other formats to come.
         ''')
     )
-    parser.add_argument("filename", help="Path to Session file", action='store', type=str)
+    parser.add_argument("filename", help="Path to Session file", action='store',
+     type=str)
     args = parser.parse_args()
 
     

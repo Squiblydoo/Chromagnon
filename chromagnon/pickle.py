@@ -74,4 +74,4 @@ class Pickle():
         # XXX Some Length are two big...
         if length * 2 > self.dataSize - self.data.tell():
             return None
-        return self.data.read(length*2).decode('utf-8', 'ignore')
+        return self.data.read(length*2).decode('utf-16', 'ignore')
