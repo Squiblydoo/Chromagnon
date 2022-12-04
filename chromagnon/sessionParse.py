@@ -240,9 +240,16 @@ class CommandSetExtensionAppID():
     TODO
     """
     def __init__(self, content):
-        self.content = pickle.Pickle(content)
-        self.tabId = content.readInt()
-        self.appId = content.readString()
+        # This Try and Except is temporary to allow the parsing to continue.
+        # Currently, part of the parsing is being handed bytes it cannot parse
+        # This solution is to temporarily bypass that problem.
+        try:
+            self.content = pickle.Pickle(content)
+            self.tabId = content.readInt()
+            self.appId = content.readString()
+        except:
+            self.tabId = 0
+            self.appId = 0
 
     def __str__(self):
         return "SetExtensionAppID - Tab: %d, " % self.tabId +\

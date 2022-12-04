@@ -26,14 +26,41 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import argparse
 import sys
+import textwrap
+
 
 import chromagnon.SNSSParse
 import chromagnon.sessionParse
 
 def main():
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent('''
+[Chromagnon Chrome Session Parser]
+
+[Input File]
+    The input file of this program is the Chrome Session File.
+    It is encoded and the usual names are "Current Session" and
+    "Session_..." whereas the underscore is followed with numerical 
+    values.
+
+[Output Format]
+    Current output is raw ordering of Session data.
+        ''')
+    )
+    parser.add_argument("filename", help="Path to Session file", action='store', type=str)
+    args = parser.parse_args()
+
+    
+    # Getting Data
     snss = chromagnon.SNSSParse.parse(sys.argv[1])
+
+    # Parse Retrived data
     sessionCommand = chromagnon.sessionParse.parse(snss)
+
+    # Print data based on SNSS Commands
     for command in sessionCommand:
         print(command)
 
