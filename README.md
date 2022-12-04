@@ -27,6 +27,10 @@ The original creator was working on reverse engineering SSNS file format : [see 
 
 I (Squiblydoo) am testing each of the tools and am testing the functionality of each. There are currently some issues with chromagnonCache and chromagnonVisitedLinks: chromagnonCache can print the cache to file, but it currently has issues when the user attempts to search for one url within the cache. The issue may be due to "SuperFastHash" with some of my band-aid fixes or it may be due to changes made by Chrome in the last 10 years. 
 
+### Known issue:
+The Session parser currently has an issue with parsing the "CommandSetExtensionAppID". Current work-around circumvents this but I will continue to look for a solution.
+
+
 ## Tests
 Scripts are in the process of being updated and tested.
 * The Scripts appear to be working happily on Win 10, Mac OS; modern Chrome Browsers and MS Edge. More testing to be done.
