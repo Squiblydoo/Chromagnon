@@ -108,9 +108,10 @@ def main():
                         help="High end of the time window : 'm/d/Y H:M:S' or "
                         "'m/d/Y'")
     parser.add_argument("-f", "-format", action='store', default="classical",
-                        choices=["csv", "column", "classical", "json"])
+                        choices=["csv", "column", "classical", "json"],
+                        help='Choose format for output formatting (csv, column, clasical, json)')
     parser.add_argument("-d", "-delimiter", action='store',
-                        help="Delimiter used in output formating")
+                        help="Specify a delimiter used in output formating")
     parser.add_argument("-ul", "-urlLength", action='store', default=0,
                         help="Shrink urls display")
     parser.add_argument("-c", "-column", action='store', nargs='+',
@@ -127,8 +128,8 @@ def main():
     # Getting data
     if "cc" in args.c and not args.cache:
         print( sys.stderr, \
-                 "\033[31mIf you want to use 'cc' column you must specify the"\
-                 "cache directory with -cache flag\033[0m")
+                 "[If you want to use 'cc' column you must specify the"\
+                 "cache directory with -cache flag]")
         parser.print_help()
         sys.exit(-1)
     elif "cc" in args:

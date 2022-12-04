@@ -79,6 +79,8 @@ class CommandSetTabWindow():
         # Strange alignment : two uint8 takes 8Bytes...
         self.windowId = struct.unpack(types.uint32, content.read(4))[0]
         self.tabId = struct.unpack(types.uint32, content.read(4))[0]
+        
+ 
 
     def __str__(self):
         return "SetTabWindow - Window: %d, Tab: %d" % \
@@ -94,6 +96,7 @@ class CommandSetTabIndexInWindow():
         """
         # Content is Tab ID on 8bits and Index on 32bits
         # But due to alignment Tab ID is on 32bits
+
         self.tabId = struct.unpack(types.int32, content.read(4))[0]
         self.index = struct.unpack(types.int32, content.read(4))[0]
 
@@ -241,16 +244,10 @@ class CommandSetExtensionAppID():
     TODO
     """
     def __init__(self, content):
-        # This Try and Except is temporary to allow the parsing to continue.
-        # Currently, part of the parsing is being handed bytes it cannot parse
-        # This solution is to temporarily bypass that problem.
-        try:
-            self.content = pickle.Pickle(content)
-            self.tabId = content.readInt()
-            self.appId = content.readString()
-        except:
-            self.tabId = 0
-            self.appId = 0
+
+        self.tabId = struct.unpack(types.uint32, content.read(4))[0]
+        self.appId = struct.unpack(types.int64, content.read(8))[0]
+
 
     def __str__(self):
         return "SetExtensionAppID - Tab: %d, " % self.tabId +\

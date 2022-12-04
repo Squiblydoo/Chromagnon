@@ -50,8 +50,18 @@ def main():
     Current output is raw ordering of Session data. Other formats to come.
         ''')
     )
-    parser.add_argument("filename", help="Path to Session file", action='store',
+
+    # These options and formats will come at a later time. Currently, the sections are
+    # hard coded so these formats don't won't work.
+
+    #parser.add_argument('-f', '-format', action='store', default='classical', 
+    #                    choices=['csv','column','classical','json'],
+    #                    help='Choose format for output formatting (csv, column, clasical, json)')
+    #parser.add_argument('-d', '-delimiter', action='store',
+    #                    help='Specify a delimiter for use in output formatting')
+    parser.add_argument('filename', help='Path to Session file', action='store',
      type=str)
+    
     args = parser.parse_args()
 
     
@@ -62,8 +72,13 @@ def main():
     sessionCommand = chromagnon.sessionParse.parse(snss)
 
     # Print data based on SNSS Commands
+    output = []
     for command in sessionCommand:
+        
         print(command)
+
+    # Handle table printing
+
 
 if __name__ == "__main__":
     main()
