@@ -1,4 +1,4 @@
-Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
+Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensics.
 
 ## Tools
 * `chromagnonHistory.py` parses **Chrome History** file ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonHistory-=-chromagnonHistory.py)
@@ -18,7 +18,7 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensic.
 ## Requirements 
 * Updates to Python 3 in progress - Squiblydoo
 
-## Remarks
+## Remarks from original project - I don't know if they are true or not
 * Most of the code is Endianness dependant and tested only on little endian hosts
 * The code is alignment dependant. If Chrome was compiled with custom alignment flags, it probably won't work.
 
@@ -29,7 +29,7 @@ I (Squiblydoo) am testing each of the tools and am testing the functionality of 
 
 ## Tests
 Scripts are in the process of being updated and tested.
-* ChromagnonHistory and ChromagnonDownload on Windows 10 amd64 parsing history file from Windows 10 64 bit (Chrome Build 107)
+* The Scripts appear to be working happily on Win 10, Mac OS; modern Chrome Browsers and MS Edge. More testing to be done.
 
 Help is welcome to test Chromagnon on other plateforms.
 
