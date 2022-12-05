@@ -33,7 +33,7 @@ Reverse engineered from chrome/browser/sessions/*
 import os
 import struct
 
-import types
+import chromagnon.types as types
 
 SNSS_MAGIC = 0x53534E53
 
@@ -47,23 +47,19 @@ def parse(path):
     f.seek(0, os.SEEK_END)
     end = f.tell()
     f.seek(0, os.SEEK_SET)
-    # The magic and version were originally int32
-    # For the following I converted them base on the pack and unpack
-    # Functions as described by 
-    # Digital Ocean: https://www.digitalocean.com/community/tutorials/python-struct-pack-unpack
-    # and https://docs.python.org/3.7/library/struct.html#format-characters
-    magic = struct.unpack('i', f.read(4))[0]
+
+    magic = struct.unpack(types.uint32, f.read(4))[0]
     if magic != SNSS_MAGIC:
         raise Exception("Invalid file header!")
-    version = struct.unpack('i', f.read(4))[0]
+    version = struct.unpack(types.uint32, f.read(4))[0]
     try:
         while (end - f.tell()) > 0:
             # Original script used int16, it has now been converted into a short or 'h'
-            commandSize = struct.unpack('h', f.read(2))[0]
+            commandSize = struct.unpack(types.uint16, f.read(2))[0]
             if commandSize == 0:
                 raise Exception("Corrupted File!")
             # idType is a uint8; B represents an unsigned char 
-            idType = struct.unpack('B', f.read(1))[0]
+            idType = struct.unpack(types.uint8, f.read(1))[0]
             
             # Size of idType is included in commandSize
             content = f.read(commandSize - 1)
