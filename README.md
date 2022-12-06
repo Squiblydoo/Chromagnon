@@ -8,28 +8,47 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensics.
 * `chromagnonSession.py` parses **Session_...** files 
 * `chromagnonTab.py` parses **Tab_...** files
 
-## Files for analysis are located as follows
-* User's **Hisotry** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
-* **Visited Links** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
-* **Cache_Data** directory is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
-* **Session...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
-* **Tab...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
-
 ## Requirements 
-* Updates to Python 3 in progress - Squiblydoo
+* Python 3 - No other dependencies are needed.
 
 ## Remarks from original project - I don't know if they are true or not
 * Most of the code is Endianness dependant and tested only on little endian hosts
 * The code is alignment dependant. If Chrome was compiled with custom alignment flags, it probably won't work.
 
 ## Work In Progress
-The original creator was working on reverse engineering SSNS file format : [see this page](https://github.com/JRBANCEL/Chromagnon/wiki/Reverse-Engineering-SSNS-Format) for details. Will this fork include SSNS file parsing? Who knows! I hope it will at some point.
+The original creator was working on reverse engineering SNSS file format : [see this page](https://github.com/JRBANCEL/Chromagnon/wiki/Reverse-Engineering-SSNS-Format) for details. I (Squiblydoo) am actively reverse engineering the SNSS format and including additional support for SNSS commands in the parser and will likely provide my tools for reverse engineering the commands at a later point.
 
-I (Squiblydoo) am testing each of the tools and am testing the functionality of each. There are currently some issues with chromagnonCache and chromagnonVisitedLinks: chromagnonCache can print the cache to file, but it currently has issues when the user attempts to search for one url within the cache. The issue may be due to "SuperFastHash" with some of my band-aid fixes or it may be due to changes made by Chrome in the last 10 years. 
+I've created a pattern for the hex editor [ImHex](https://github.com/WerWolv/ImHex) which highlights each SNSS command. This is substiantially speeding up the reversing process. However, it appears not all SNSS commands are forensically interesting so some may be excluded from default output at a later time.
+![image](https://user-images.githubusercontent.com/77356206/206008380-678d3cac-1fa2-413d-91f0-28ca3d23f9a8.png)
+
+
+I (Squiblydoo) am testing each of the tools and am testing the functionality of each. 
+There are currently some issues with chromagnonCache and chromagnonVisitedLinks: chromagnonCache can print the cache to file, but it currently has issues when the user attempts to search for one url within the cache. The issue may be due to "SuperFastHash" with some of my band-aid fixes or it may be due to changes made by Chrome in the last 10 years. 
 
 ### Known issue:
 The Session parser currently has an issue with parsing the "CommandSetExtensionAppID". Current work-around circumvents this but I will continue to look for a solution.
 
+## Files for analysis are located as follows
+### Windows File locations
+* User's **History** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* **Visited Links** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
+* **Cache_Data** directory is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
+* **Session...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+* **Tab...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+
+### MacOS File locations
+* User's **History** file is located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/History"
+* **Visted Links** file is located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Visited Links"
+* **Cache_Data** directory is located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Cache/Cache_Data"
+* **Session...** files are located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Sessions/"
+* **Tab...** files are located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Sessions/"
+
+### Linux File locations
+* User's **History** file is located at "/home/%username%/.config/google-chrome/Default/History"
+* **Visited Links** file is located at "/home/%username%/.config/google-chrome/Default/Visited Links"
+* **Cache_Data** directory is located at "/home/%username%/.config/google-chrome/Default/Cache/Cache_Data"
+* **Session..** files are located at "/home/%username%/.config/google-chrome/Default/Sessions/"
+* **Tab...** files are located at "/home/%username%/.config/google-chrome/Default/Sessions/"
 
 ## Tests
 Scripts are in the process of being updated and tested.
