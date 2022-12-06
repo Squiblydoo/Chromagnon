@@ -63,6 +63,8 @@ TYPE_DICT = {'0': "CommandSetTabWindow",
              '21': "CommandLastActiveTime",
              '33': "CommandSideSearch"}
 
+# Window Constants defined from
+# https://github.com/deactivated/python-snss/blob/master/snss/constants.py
 WINDOW_SHOW_STATE = {
     0 : 'default',
     1 : 'normal',
