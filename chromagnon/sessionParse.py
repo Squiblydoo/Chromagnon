@@ -40,7 +40,7 @@ import chromagnon.pickle as pickle
 import chromagnon.types as types
 
 # Not all command types are accounted for.
-# I have encountered 19, 21, 23, 32
+# I have encountered 19, 32
 # Presumably some of the numbers between those need accounted for too.
 # Some commands were implemented multiple times. The unused versions are being kept
 # for historical purposes and for completeness.
@@ -60,7 +60,9 @@ TYPE_DICT = {'0': "CommandSetTabWindow",
              '14': "CommandSetWindowBounds3",
              '16': "CommandTabClosed",
              '17': "CommandWindowClosed",
+             #'19': "CommandSessionStorageAssociated",
              '21': "CommandLastActiveTime",
+             '23': "CommandSetWindowWorkspace2",
              '33': "CommandSideSearch"}
 
 # Window Constants defined from
@@ -96,7 +98,7 @@ def parse(commandList):
 
 class CommandSetTabWindow():
     """
-    Set a Tab in a Window
+    Associates a tab with a window.
     """
     def __init__(self, content):
         """
@@ -137,19 +139,18 @@ class CommandTabClosed():
     Store closure of a Tab with Timestamp
     """
     def __init__(self, content):
-        # Content is Tab ID on 8bits and Close Time on 64bits
-        self.tabId = struct.unpack(types.uint32, content.read(4))[0]
-
-        # This is always null, we dump it so we can get the date correctly.
-        self.dumpster = struct.unpack(types.uint32, content.read(4))[0] 
+        # Per Chromium source code this consists of a WindowID and a Tab ID.
+        # The windowId is stored but the Tab Id is set to 0.
+        self.windowId = struct.unpack(types.uint32, content.read(4))[0]
+        self.tabId = struct.unpack(types.uint32, content.read(4))[0] 
         self.closeTime = struct.unpack(types.uint64, content.read(8))[0]
         self.closeTime = datetime.datetime(1601, 1, 1) + \
                     datetime.timedelta(microseconds=self.closeTime)
         self.description = self.__doc__
 
     def __str__(self):
-        return "TabClosed (%s) - Tab: %d, Close Time: %s" % \
-               (self.description.strip(), self.tabId, self.closeTime)
+        return "TabClosed (%s) - Window: %d, Close Time: %s" % \
+               (self.description.strip(), self.windowId, self.closeTime)
 
 class CommandWindowClosed():
     """
@@ -364,3 +365,35 @@ class CommandSideSearch():
     def __str__(self):
         return "SideSearch (%s) - Tab: %d, Index: %d, Url: %s" % \
             (self.description.strip(), self.tabId, self.index, self.url.strip())
+
+class CommandSetWindowWorkspace2():
+    """
+    Sets the workspace the window resides in.
+    """
+    def __init__(self, content):
+        # Chrome source code session_service_base.h defines SetWindowWorkspace
+        # as consistent of a windowID and a workspace string.
+        content = pickle.Pickle(content)
+        self.windowId = content.readInt()
+        self.workspaceGuid = content.readString()
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetWindowWorkSpace (%s) - Window: %d, Workspace: %s" % \
+            (self.description.strip(), self.windowId, self.workspaceGuid)
+
+class CommandSessionStorageAssociated():
+    """
+    Associates session with a storage namespace.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.sessionId = content.readInt()
+        self.storageNamespace = content.readString()
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SessionStorageAssociated (%s) - Session Id: %d, Storage Namespace: %s" %\
+            (self.description.strip(), self.sessionId, self.storageNamespace)
+
+    
