@@ -8,13 +8,6 @@ Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensics.
 * `chromagnonSession.py` parses **Session_...** files 
 * `chromagnonTab.py` parses **Tab_...** files
 
-## Files for analysis are located as follows
-* User's **Hisotry** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
-* **Visited Links** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
-* **Cache_Data** directory is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
-* **Session...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
-* **Tab...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
-
 ## Requirements 
 * Python 3 - No other dependencies are needed.
 
@@ -31,6 +24,27 @@ There are currently some issues with chromagnonCache and chromagnonVisitedLinks:
 ### Known issue:
 The Session parser currently has an issue with parsing the "CommandSetExtensionAppID". Current work-around circumvents this but I will continue to look for a solution.
 
+## Files for analysis are located as follows
+### Windows File locations
+* User's **History** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\History"
+* **Visited Links** file is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Visited Links"
+* **Cache_Data** directory is located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Cache\Cache_Data"
+* **Session...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+* **Tab...** files are located at "C:\Users\\%user%\AppData\Local\Google\Chrome\User Data\Default\Sessions\"
+
+### MacOS File locations
+* User's **History** file is located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/History"
+* **Visted Links** file is located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Visited Links"
+* **Cache_Data** directory is located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Cache/Cache_Data"
+* **Session...** files are located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Sessions/"
+* **Tab...** files are located at "/Users/%Username%/Library/Application Support/Google/Chrome/Default/Sessions/"
+
+### Linux File locations
+* User's **History** file is located at "/home/%username%/.config/google-chrome/Default/History"
+* **Visited Links** file is located at "/home/%username%/.config/google-chrome/Default/Visited Links"
+* **Cache_Data** directory is located at "/home/%username%/.config/google-chrome/Default/Cache/Cache_Data"
+* **Session..** files are located at "/home/%username%/.config/google-chrome/Default/Sessions/"
+* **Tab...** files are located at "/home/%username%/.config/google-chrome/Default/Sessions/"
 
 ## Tests
 Scripts are in the process of being updated and tested.
