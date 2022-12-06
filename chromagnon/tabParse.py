@@ -70,7 +70,7 @@ class CommandUpdateTabNavigation():
         self.tabId = content.readInt()
         self.index = content.readInt()
         self.url = content.readString()
-        self.title = content.readString16()
+        #self.title = content.readString16()
         
         #print "State:", content.readString()
         #print "Transition:", (0xFF & content.readInt())
@@ -78,8 +78,8 @@ class CommandUpdateTabNavigation():
         # Strange alignment : two uint8 takes 8Bytes...
 
     def __str__(self):
-        return "UpdateTabNavigation - Tab: %d, Index: %d, Title: %s, Url: %s" % \
-               (self.tabId, self.index, self.title, self.url)
+        return "UpdateTabNavigation - Tab: %d, Index: %d, Url: %s" % \
+               (self.tabId, self.index, self.url)
 
 class CommandRestoredEntry():
     """

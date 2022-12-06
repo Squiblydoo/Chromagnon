@@ -54,6 +54,16 @@ class Pickle():
 #        print "dataSize: %d, payloadSize: %d, payloadStart: %d" % \
 #              (self.dataSize, self.payloadSize, self.payloadStart)
 
+    def readBool(self):
+        return struct.unpack(types.bool8, self.data.read(1))[0]
+
+    def readChar(self):
+        return struct.unpack(types.uint8, self.data.read(1))[0]
+
+    def readShort(self):
+        return struct.unpack(types.uint16, self.data.read(2))[0]
+
+
     def readInt(self):
         """Reading Int on 32bits"""
         return struct.unpack(types.uint32, self.data.read(4))[0]
@@ -75,3 +85,6 @@ class Pickle():
         if length * 2 > self.dataSize - self.data.tell():
             return None
         return self.data.read(length*2).decode('utf-16', 'ignore')
+
+    def readDouble(self):
+        return struct.unpack(types.int64, self.data.read(8))[0]

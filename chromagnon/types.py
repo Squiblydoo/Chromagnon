@@ -3,6 +3,7 @@
     # Descriptions of the usage are found in the following resources:
     # Digital Ocean: https://www.digitalocean.com/community/tutorials/python-struct-pack-unpack
     # and https://docs.python.org/3.7/library/struct.html#format-characters
+bool8 = '?'
 uint8 = 'B'
 uint16 = 'H'
 int16 = 'h'
