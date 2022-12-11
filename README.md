@@ -60,9 +60,9 @@ Help is welcome to test Chromagnon on other plateforms.
 The code is released under **New BSD License** or **Modified BSD License**. See LICENSE file for details.
 
 ## References:
-[CCL-SSNS Github Repository](https://github.com/cclgroupltd/ccl-ssns)
-[Chromagnon Github Wiki](https://github.com/JRBANCEL/Chromagnon/wiki)
-[Chrome Session and Tabs Files (and the puzzle of the pickle)](https://digitalinvestigation.wordpress.com/2012/09/03/chrome-session-and-tabs-files-and-the-puzzle-of-the-pickle/#comments) - Alex Caithness, CCL Forensics 
-[chromium-snss-parse Github repository](https://github.com/instance01/chromium-snss-parse)
-[python-snss Github repository](https://github.com/deactivated/python-snss/blob/master/snss/constants.py)
-[Session Service source code](https://source.chromium.org/chromium/chromium/src/+/main:components/sessions/core/session_service_commands.cc): 
+* [CCL-SSNS Github Repository](https://github.com/cclgroupltd/ccl-ssns)
+* [Chromagnon Github Wiki](https://github.com/JRBANCEL/Chromagnon/wiki)
+* [Chrome Session and Tabs Files (and the puzzle of the pickle)](https://digitalinvestigation.wordpress.com/2012/09/03/chrome-session-and-tabs-files-and-the-puzzle-of-the-pickle/#comments) - Alex Caithness, CCL Forensics 
+* [chromium-snss-parse Github repository](https://github.com/instance01/chromium-snss-parse)
+* [python-snss Github repository](https://github.com/deactivated/python-snss/blob/master/snss/constants.py)
+* [Session Service source code](https://source.chromium.org/chromium/chromium/src/+/main:components/sessions/core/session_service_commands.cc): 
