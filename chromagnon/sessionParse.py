@@ -39,13 +39,12 @@ import sys
 import chromagnon.pickle as pickle
 import chromagnon.types as types
 
-# Not all command types are accounted for.
-# I have encountered 19, 32
-# Presumably some of the numbers between those need accounted for too.
-# Some commands were implemented multiple times. The unused versions are being kept
-# for historical purposes and for completeness.
+# SNSS Commands are defined in session_service_commands.cc:
+# https://source.chromium.org/chromium/chromium/src/+/main:components/sessions/core/session_service_commands.cc
+# For the sake of completeness, I have included the obsolete commands so that they are accounted for.
 
 TYPE_DICT = {'0': "CommandSetTabWindow",
+#            '1' : "CommandSetWindowBounds3", # OBSOLETE
              '2': "CommandSetTabIndexInWindow",
              '3': "CommandTabClosed", # It appears this was replaced by Command 16
              '4': "CommandWindowClosed", # It appears this was replaced by Command 17
@@ -54,16 +53,31 @@ TYPE_DICT = {'0': "CommandSetTabWindow",
              '7': "CommandSetSelectedNavigationIndex",
              '8': "CommandSetSelectedTabInIndex",
              '9': "CommandSetWindowType",
+#           '10': "CommandSetWindowBounds2", # OBSOLETE
              '11': "CommandTabNavigationPathPrunedFromFront",
              '12': "CommandSetPinnedState",
              '13': "CommandSetExtensionAppID",
              '14': "CommandSetWindowBounds3",
+             '15': "CommandSetWindowAppName",
              '16': "CommandTabClosed",
              '17': "CommandWindowClosed",
+#            '18': "CommandSetTabUserAgentOverride", # OBSOLETE
              #'19': "CommandSessionStorageAssociated",
+             '20': "CommandSetActiveWindow",
              '21': "CommandLastActiveTime",
+#            '22': "CommandSetWindowWorkspace" # OBSOLETE
              '23': "CommandSetWindowWorkspace2",
-             '33': "CommandSideSearch"}
+             '24': "CommandTabNavigationPathPruned",
+             '25': "CommandSetTabGroup",
+#            '26': "CommandSetGroupMetadata", # OBSOLETE
+             '27': "CommandSetTabGroupMetadata2",
+             '28': "CommandSetTabGuid",
+             '29': "CommandSetTabUserAgentOverride2",
+             '30': "CommandSetTabData",
+             '31': "CommandSetWindowUserTitle",
+             '32': "CommandSetWindowVisibleOnAllWorkspaces",
+             '33': "CommandAddTabExtraData",
+             '34': "CommandAddWindowExtraData"}
 
 # Window Constants defined from
 # https://github.com/deactivated/python-snss/blob/master/snss/constants.py
@@ -346,9 +360,9 @@ class CommandLastActiveTime():
 
 
 
-class CommandSideSearch():
+class CommandAddTabExtraData():
     """
-    Google Side Search Query
+    Extra tab data such as side search.
     """
     def __init__(self, content):
         content = pickle.Pickle(content)
@@ -363,7 +377,7 @@ class CommandSideSearch():
         self.description = self.__doc__
 
     def __str__(self):
-        return "SideSearch (%s) - Tab: %d, Index: %d, Url: %s" % \
+        return "CommandAddTabExtraData (%s) - Tab: %d, Index: %d, Url: %s" % \
             (self.description.strip(), self.tabId, self.index, self.url.strip())
 
 class CommandSetWindowWorkspace2():
