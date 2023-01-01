@@ -59,6 +59,17 @@ class DatetimeAction(argparse.Action):
                 print(sys.stderr, "Invalid datetime format !")
                 sys.exit(-1)
         setattr(namespace, self.dest, value)
+COLUMN_HEADERS = {
+        "vt" : "Visit Time",
+        "fv" : "Previous Page",
+        "tr" : "Transition Description",
+        "u" :  "Url",
+        "tl" : "Page Title",
+        "vc" : "Visit Counter",
+        "tc" : "Typed Counter",
+        "lv" : "Last Visit Time",
+        "cc" : "Is Present in the Cache"
+}
 
 def main():
     # Dirty !!!!!!!!!!!
@@ -117,7 +128,7 @@ def main():
     parser.add_argument("-c", "-column", action='store', nargs='+',
                         choices=["vt", "fv", "tr", "u", "tl", "vc", "tc", "lv",
                         "cc"], help="Choose columns to display",
-                         default=["vt", "vc", "u"])
+                         default=["vt", "vc", "tr", "tl", "u"])
     parser.add_argument("-cache", action='store',
                         help="Cache directory to check if the pages are cached",
                         default=False)
@@ -141,8 +152,14 @@ def main():
 
     # Creating a table according to chosen columns
     output = []
+    header = []
+    for columnHeader in args.c:
+        header.append(COLUMN_HEADERS[columnHeader])
+    output.append(header)
     for item in data:
         line = []
+        
+        
         for column in args.c:
             line.append(item.columnToStr(column))
         output.append(line)
