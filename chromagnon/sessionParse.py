@@ -104,7 +104,11 @@ def parse(commandList):
             content = BytesIO(command.content)
             commandClass = sys.modules[__name__].__dict__.get(\
                            TYPE_DICT[str(command.idType)])
-            output.append(commandClass(content))
+             # Not all the commands parsing is implemented. This try except alieviates that problem.
+            try:
+                output.append(commandClass(content))
+            except:
+                pass
         else:
             output.append
             #print("Command ID not accounted for: %d, %s", command.idType, str(command.content))
