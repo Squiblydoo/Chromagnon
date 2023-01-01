@@ -118,7 +118,7 @@ def main():
                         default=datetime.datetime.now(),
                         help="High end of the time window : 'm/d/Y H:M:S' or "
                         "'m/d/Y'")
-    parser.add_argument("-f", "-format", action='store', default="classical",
+    parser.add_argument("-f", "-format", action='store', default="csv",
                         choices=["csv", "column", "classical", "json"],
                         help='Choose format for output formatting (csv, column, clasical, json)')
     parser.add_argument("-d", "-delimiter", action='store',
@@ -166,6 +166,7 @@ def main():
 
     # Printing table
     if args.d == None:
+        sys.stdout.reconfigure(encoding='utf-8')
         sys.modules["chromagnon." + args.f + "Output"].__getattribute__(
             args.f + "Output")(output)
     else:
