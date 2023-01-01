@@ -59,17 +59,6 @@ class DatetimeAction(argparse.Action):
                 print(sys.stderr, "Invalid datetime format !")
                 sys.exit(-1)
         setattr(namespace, self.dest, value)
-COLUMN_HEADERS = {
-        "vt" : "Visit Time",
-        "fv" : "Previous Page",
-        "tr" : "Transition Description",
-        "u" :  "Url",
-        "tl" : "Page Title",
-        "vc" : "Visit Counter",
-        "tc" : "Typed Counter",
-        "lv" : "Last Visit Time",
-        "cc" : "Is Present in the Cache"
-}
 
 def main():
     # Dirty !!!!!!!!!!!
@@ -154,22 +143,21 @@ def main():
     output = []
     header = []
     for columnHeader in args.c:
-        header.append(COLUMN_HEADERS[columnHeader])
+        header.append(chromagnon.historyParse.HistoryEntry.COLUMN_STR[columnHeader])
     output.append(header)
     for item in data:
         line = []
-        
-        
         for column in args.c:
             line.append(item.columnToStr(column))
         output.append(line)
 
     # Printing table
+    sys.stdout.reconfigure(encoding='utf-8')
     if args.d == None:
-        sys.stdout.reconfigure(encoding='utf-8')
         sys.modules["chromagnon." + args.f + "Output"].__getattribute__(
             args.f + "Output")(output)
     else:
+        
         sys.modules["chromagnon." + args.f + "Output"].__getattribute__(
             args.f + "Output")(output, separator=args.d)
 

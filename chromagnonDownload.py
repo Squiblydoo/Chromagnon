@@ -63,20 +63,22 @@ def main():
         rb : Received Bytes
         tb : Total Bytes
         pt : Percent Received
-        p : path
-        u : url
-        s : state
+        dt : Danger Type
+        rf : Referer
+        u : Tab URL
+        p : Path downloaded to
+        s : State of Download
              '''))
-    parser.add_argument("-f", "-format", action='store', default="classical",
+    parser.add_argument("-f", "-format", action='store', default="csv",
                         choices=["csv", "column", "classical", "json"])
     parser.add_argument("-d", "-delimiter", action='store',
                         help="Delimiter used in output formating")
     parser.add_argument("-ul", "-urlLength", action='store', default=0,
                         help="Shrink urls display")
     parser.add_argument("-c", "-column", action='store', nargs='+',
-                        choices=["st", "rb", "tb", "p", "u", "s", "pt",
+                        choices=["st", "rb", "tb", "p", "u", "s", "pt", "tu"
                         "cc"], help="Choose columns to display",
-                         default=["st", "u", "p"])
+                         default=["st", "rf","u", "p", "s", "dt"])
     parser.add_argument("filename", help="Path to History file",
                         action='store', type=str)
     args = parser.parse_args()
@@ -86,6 +88,10 @@ def main():
 
     # Creating a table according to chosen columns
     output = []
+    header = []
+    for columnHeader in args.c:
+        header.append(chromagnon.downloadParse.DownloadEntry.COLUMN_STR[columnHeader])
+    output.append(header)
     for item in data:
         line = []
         for column in args.c:
@@ -93,6 +99,7 @@ def main():
         output.append(line)
 
     # Printing table
+    sys.stdout.reconfigure(encoding='utf-8')
     if args.d == None:
         sys.modules["chromagnon." + args.f + "Output"].__getattribute__(
             args.f + "Output")(output)

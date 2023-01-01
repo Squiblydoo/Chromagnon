@@ -35,6 +35,9 @@ import datetime
 import sqlite3
 import sys
 
+
+
+
 def parse(filename, urlLength):
     """
     filename: path to the history file
@@ -56,6 +59,9 @@ def parse(filename, urlLength):
                               start_time, \
                               received_bytes, \
                               total_bytes, \
+                              danger_type, \
+                              referrer, \
+                              tab_url,  \
                               state \
                               FROM downloads;")
 
@@ -72,12 +78,41 @@ class DownloadEntry(object):
                   'rb': "receivedBytes",
                   'tb': "totalBytes",
                   'pt': "percentReceived",
+                  'dt': "danger_type",
+                  'rf': "referrer",
                   's': "state"}
+                  
     STATE_STR = ["In Progress",
                  "Complete",
                  "Cancelled",
                  "Removing",
                  "Interrupted"]
+
+    # Danger Types are based on
+    # https://source.chromium.org/chromium/chromium/src/+/main:out/Debug/gen/chrome/common/extensions/api/downloads.h
+    # However, I observed the implementation of the enum differs
+    # Slightly in some implementations around enum 8 
+    DANGER_TYPE = {
+                0 : 'NOT_DANGEROUS',
+                1 : 'DANGEROUS_FILE',
+                2 : 'DANGEROUS_URL',
+                3 : 'DANGEROUS_CONTENT',
+                4 : 'UNCOMMON_CONTENT',
+                5 : 'DANGEROUS_HOST',
+                6 : 'POTENTIALLY_UNWANTED',
+                7 : 'DEEP_SCANNED_SAFE',
+                8 : 'DANGEROUS_DOWNLOAD_ACCEPTED',
+                9 : 'ALLOW_LISTED_BY_POLICY',
+                10 : 'PASSWORD_PROTECTED',
+                11 : 'TOO LARGE',
+                12 : 'SENSITIVE_CONTENT_WARNING',
+                13 : 'SENSITIVE_CONTENT_BLOCK',
+                14 : 'DEEP_SCANNED_SAFE',
+                15 : 'DEEP_SCANNED_OPENED_DANGEROUS',
+                16 : 'PROMPT_FOR_SCANNING',
+                17 : 'DANGEROUS_ACCOUNT_COMPROMISE'
+                }
+
 
     def __init__(self, item, urlLength):
         """Parse raw input"""
@@ -91,7 +126,9 @@ class DownloadEntry(object):
                          item[3])
         self.receivedBytes = item[4]
         self.totalBytes = item[5]
-        self.state = DownloadEntry.STATE_STR[item[6]]
+        self.danger_type = DownloadEntry.DANGER_TYPE[item[6]]
+        self.referrer = item[7]
+        self.state = DownloadEntry.STATE_STR[item[9]]
         if int(item[5]) == 0:
             self.percentReceived = "0%"
         else:
