@@ -1,5 +1,8 @@
 Chromagnon is a set of small tools dedicated to _Chrome_/_Chromium_ forensics.
 
+The tools are used with the CLI, but a separate branch "GUI" is being used to create GUI elements for each tool including a combined GUI.
+The GUI is preferred for ease of use and will be merged into the main branch at a later date.
+
 ## Tools
 * `chromagnonHistory.py` parses **Chrome History** file ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonHistory-=-chromagnonHistory.py)
 * `chromagnonCache.py` parses **Cache_Data** directory ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonCache-=-chromagnonCache.py)
