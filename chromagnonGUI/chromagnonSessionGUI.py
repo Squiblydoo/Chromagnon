@@ -10,6 +10,7 @@ parentDirectory = os.path.dirname(currentDirectory)
 sys.path.append(parentDirectory)
 
 import chromagnonSession
+import chromagnonAbout
 
 class main_window(TkinterDnD.Tk):
     def __init__(self):
@@ -21,6 +22,14 @@ class main_window(TkinterDnD.Tk):
                 background="white")
         treeviewStyle.map("Treeview",
                 background=[('selected', 'blue')])
+        
+        ## Create menu bar
+        menubar = Menu(self)
+        helpMenu = Menu(menubar, tearoff=0)
+        helpMenu.add_command(label="About...", command=self.showAbout)
+        menubar.add_cascade(label="Help", menu=helpMenu)
+        self.config(menu=menubar)
+
         
         instructionLabel = Label(self, text="Drag and drop Session or Tab file into window")
         instructionLabel.pack()
@@ -81,6 +90,10 @@ class main_window(TkinterDnD.Tk):
                                   values=(record,))
             self.count += 1
             self.sessionEntry += 1
+
+
+    def showAbout(self):
+        newWindow = chromagnonAbout.main_window()
 
 
 

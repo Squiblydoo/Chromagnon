@@ -71,6 +71,7 @@ def guiParse(path):
     output.append(header)
     for item in data:
         line = []
+        line.append("History Event")
         for column in columnDefault:
             line.append(item.columnToStr(column))
         output.append(line)
