@@ -5,6 +5,9 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 import sys
 import os
+import pyperclip
+import itertools
+
 currentDirectory = os.path.dirname(os.path.realpath(__file__))
 parentDirectory = os.path.dirname(currentDirectory)
 sys.path.append(parentDirectory)
@@ -35,7 +38,7 @@ class main_window(TkinterDnD.Tk):
         instructionLabel.pack()
 
         treeFrame = Frame(self)
-        treeFrame.pack(pady=20)
+        treeFrame.pack(pady=20, expand=True, anchor=W)
         verticalScroll = Scrollbar(treeFrame)
         horizontalScroll = Scrollbar(treeFrame, orient='horizontal')
         self.dataTable = ttk.Treeview(treeFrame, yscrollcommand=verticalScroll.set, xscrollcommand=horizontalScroll.set, height=500)
@@ -43,14 +46,23 @@ class main_window(TkinterDnD.Tk):
         horizontalScroll.config(command=self.dataTable.xview)
         verticalScroll.pack(side=RIGHT, fill=Y)
         horizontalScroll.pack(side=BOTTOM, fill=X)
-        self.dataTable.pack()
+        self.dataTable.pack(anchor=W)
+
+        ## Allow user to copy using Control+C
+        self.dataTable.bind("<Control-Key-c>", self.copyFromTreeview)
+        
+        ## Create a menu for copying using right-click
+        self.popupMenu = Menu(self.dataTable, tearoff=0)
+        self.popupMenu.add_command(command=self.copyFromTreeview, label="Copy")
+        self.dataTable.bind('<Button-3>', self.handlePopUpMenu )
+
 
 
         ## Design table
         self.dataTable['columns'] = ('Command',)
 
         self.dataTable.column("#0", width=50, minwidth = 25)
-        self.dataTable.column("Command", anchor=W, width=800)
+        self.dataTable.column("Command", anchor=W, width=2000)
 
         ## Headings
         self.dataTable.heading("#0", text="")
@@ -94,6 +106,24 @@ class main_window(TkinterDnD.Tk):
 
     def showAbout(self):
         newWindow = chromagnonAbout.main_window()
+
+    ## Copy entire selected row
+    def copyFromTreeview(self):
+        selection = self.dataTable.selection()
+        copyValues = []
+        for each in selection:
+            value = self.dataTable.item(each)["values"]
+            copyValues.append(value)
+        copyList = list(itertools.chain.from_iterable(copyValues))
+        copyString = " ".join(map(str,copyList))
+        pyperclip.copy(copyString)
+
+    ## Handle Popup menu for Right-click; Highlight right-clicked row
+    def handlePopUpMenu(self, event):
+        selectedRow = self.dataTable.identify_row(event.y)
+        self.dataTable.identify_row(event.y)
+        self.dataTable.selection_set(selectedRow)
+        self.popupMenu.post(event.x_root, event.y_root)
 
 
 

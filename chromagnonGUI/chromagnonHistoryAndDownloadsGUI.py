@@ -2,9 +2,11 @@ from tkinter import *
 from tkinter import ttk
 import tkinter.scrolledtext as st
 from tkinterdnd2 import DND_FILES, TkinterDnD
-
+from pathlib import Path
 import sys
 import os
+import pyperclip
+import itertools
 
 ###
 ### Since the visited links are stored in a salted hash table, it is not possible
@@ -24,7 +26,7 @@ import chromagnonAbout
 class main_window(TkinterDnD.Tk):
     def __init__(self):
         TkinterDnD.Tk.__init__(self)
-        self.geometry("800x600")
+        self.geometry("1200x600")
         self.title("Chromagnon History and Downloads Viewer")
         treeviewStyle = ttk.Style()
         treeviewStyle.configure("Treeview", 
@@ -42,6 +44,7 @@ class main_window(TkinterDnD.Tk):
         instructionLabel = Label(self, text="Drag and drop History file into window")
         instructionLabel.pack()
 
+        ## Define table properties
         treeFrame = Frame(self)
         treeFrame.pack(pady=20, expand=True, anchor=W)
         verticalScroll = Scrollbar(treeFrame)
@@ -53,21 +56,34 @@ class main_window(TkinterDnD.Tk):
         horizontalScroll.pack(side=BOTTOM, fill=X)
         self.dataTable.pack(anchor=W)
 
+        ## Allow user to copy using Control+C
+        self.dataTable.bind("<Control-Key-c>", self.copyFromTreeview)
+        
+        ## Create a menu for copying using right-click
+        self.popupMenu = Menu(self.dataTable, tearoff=0)
+        self.popupMenu.add_command(command=self.copyFromTreeview, label="Copy")
+        self.dataTable.bind('<Button-3>', self.handlePopUpMenu )
 
         ## Design table
-        self.dataTable['columns'] = ('Event Time', 'Event Type', 'Full Entry')
+        self.dataTable['columns'] = ('Event Time', 'Event Type', 'Title/Download', 'URL' )
 
-        self.dataTable.column("#0", width=50, minwidth = 25)
+        self.dataTable.column("#0", width=60, minwidth = 25)
         self.dataTable.column("Event Time", width=150)
         self.dataTable.column("Event Type", width=90)
-        self.dataTable.column("Full Entry", width=2000)
+        self.dataTable.column("Event Time", width=150)
+        self.dataTable.column("URL", width=2000)
 
         ## Headings
         self.dataTable.heading("#0", text="")
         self.dataTable.heading("Event Time", text="Event Time", anchor=W)
         self.dataTable.heading("Event Type", text="Event Type", anchor=W)
-        self.dataTable.heading("Full Entry", text="Full Entry", anchor=W)
+        self.dataTable.heading("Title/Download", text="Title/Download", anchor=W)
+        self.dataTable.heading("URL", text="URL", anchor=W)
         
+        ## Data tags
+        self.dataTable.tag_configure("DownloadHighlight", background="#d8ffcc")
+        self.dataTable.tag_configure("HistoryHighlight", background="white")
+
 
         ## Handle drag-and-drop
         self.dataTable.drop_target_register(DND_FILES)
@@ -96,25 +112,43 @@ class main_window(TkinterDnD.Tk):
         for record in combinedOutput:
             if record[0] == "Download Event":
                 self.dataTable.insert(parent='', index='end', iid=self.count, text=self.sessionEntry,
-                                    values=(record[1], "Download", record[4] + "--- Chromium Disposition: " + record[6]))
+                                    values=(record[1], "Download", Path(record[4]).name, record[3]),
+                                    tags=("DownloadHighlight",))
                 self.count += 1
                 self.dataTable.insert(parent=self.count - 1, index='end', iid=self.count , text = self.sessionEntry,
-                                      values=(record[1], "Referrer: ", record[2]))
+                                      values=(record[1], "Referrer: ", "--------------------->" , record[2]),
+                                    tags=("DownloadHighlight",))
                 self.count += 1
                 self.dataTable.insert(parent=self.count - 2, index='end', iid=self.count , text = self.sessionEntry,
-                                      values=(record[1], "URL: ", record[3]))
+                                      values=(record[1], "Disposition: ", record[6]),
+                                    tags=("DownloadHighlight",))
                 self.count += 1
                 self.dataTable.insert(parent=self.count - 3, index='end', iid=self.count , text = self.sessionEntry,
-                                      values=(record[1], "State: ", record[5]))
+                                      values=(record[1], "State: ", record[5]),
+                                    tags=("DownloadHighlight",))
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 3, index='end', iid=self.count , text = self.sessionEntry,
-                                      values=(record[1], "State: ", record[6]))
+                self.dataTable.insert(parent=self.count - 4, index='end', iid=self.count , text = self.sessionEntry,
+                                      values=(record[1], "State: ", record[6]),
+                                    tags=("DownloadHighlight",))
+                self.count += 1
+                self.dataTable.insert(parent=self.count - 5, index='end', iid=self.count , text = self.sessionEntry,
+                                      values=(record[1], "File Path: ", record[4]),
+                                    tags=("DownloadHighlight",))
                 
                 self.count += 1
                 self.sessionEntry += 1
             elif record[0] == "History Event":
                 self.dataTable.insert(parent='', index='end', iid=self.count, text=self.sessionEntry,
-                                    values=(record[1], "History", record,))
+                                    values=(record[1], "History", record[4] , record[5],),
+                                    tags=("HistoryHighlight",))
+                self.count += 1
+                self.dataTable.insert(parent=self.count - 1, index='end', iid=self.count , text = self.sessionEntry,
+                                      values=(record[1], "Transition: ", record[3]))
+                
+                self.count += 1
+                self.dataTable.insert(parent=self.count - 2, index='end', iid=self.count , text = self.sessionEntry,
+                                      values=(record[1], "Visit Count: ", record[2]))
+                
                 self.count += 1
                 self.sessionEntry += 1
                 
@@ -122,6 +156,24 @@ class main_window(TkinterDnD.Tk):
     def showAbout(self):
         newWindow = chromagnonAbout.main_window()
 
+    ## Copy entire selected row
+    def copyFromTreeview(self):
+        selection = self.dataTable.selection()
+        copyValues = []
+        for each in selection:
+            value = self.dataTable.item(each)["values"]
+            copyValues.append(value)
+        copyList = list(itertools.chain.from_iterable(copyValues))
+        copyString = " ".join(map(str,copyList))
+        pyperclip.copy(copyString)
+
+    ## Handle Popup menu for Right-click; Highlight right-clicked row
+    def handlePopUpMenu(self, event):
+        selectedRow = self.dataTable.identify_row(event.y)
+        self.dataTable.identify_row(event.y)
+        self.dataTable.selection_set(selectedRow)
+        self.popupMenu.post(event.x_root, event.y_root)
+        
 
 def main():
     root = main_window()
