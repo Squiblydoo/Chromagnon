@@ -36,6 +36,7 @@ import textwrap
 import chromagnon.columnOutput
 import chromagnon.visitedLinks
 
+
 def main():
     parser = argparse.ArgumentParser(
              formatter_class=argparse.RawDescriptionHelpFormatter,

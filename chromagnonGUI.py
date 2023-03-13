@@ -9,6 +9,7 @@ import os
 
 import chromagnonGUI.chromagnonSessionGUI  
 import chromagnonGUI.chromagnonHistoryAndDownloadsGUI
+import chromagnonGUI.chromagnonAbout
 
 class main_window(TkinterDnD.Tk):
     def __init__(self):
@@ -16,8 +17,15 @@ class main_window(TkinterDnD.Tk):
         self.geometry("300x300")
         self.title("Chromagnon")
 
+        ## Create menu bar
+        menubar = Menu(self)
+        helpMenu = Menu(menubar, tearoff=0)
+        helpMenu.add_command(label="About...", command=self.showAbout)
+        menubar.add_cascade(label="Help", menu=helpMenu)
+        self.config(menu=menubar)
+
         ## Define buttons for new windows. These will likely be redesigned at a later point.
-        historyAndDownloadsViewer = Button(self, text="History and Downloads Viewer", state=DISABLED, command=self.launchHistoryAndDownloadsViewer)
+        historyAndDownloadsViewer = Button(self, text="History and Downloads Viewer", command=self.launchHistoryAndDownloadsViewer)
         vistedLinksViewer = Button(self, text="Visited Links Viewer", state=DISABLED)
         cacheDataViewer = Button(self, text="Cache Data Viewer", state=DISABLED)
         sessionViewer = Button(self, text="Session and Tab Viewer", command=self.launchSessionViewer)
@@ -28,6 +36,9 @@ class main_window(TkinterDnD.Tk):
         cacheDataViewer.pack()
         sessionViewer.pack()
 
+    def showAbout(self):
+        newWindow = chromagnonGUI.chromagnonAbout.main_window()
+
 
     ## Define commands for launching windows.
     def launchSessionViewer(self):
@@ -35,7 +46,6 @@ class main_window(TkinterDnD.Tk):
 
     def launchHistoryAndDownloadsViewer(self):
         newWindow = chromagnonGUI.chromagnonHistoryAndDownloadsGUI.main_window()
-
 
 
 def main():

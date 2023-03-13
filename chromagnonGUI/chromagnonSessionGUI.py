@@ -5,33 +5,24 @@ from tkinterdnd2 import DND_FILES, TkinterDnD
 
 import sys
 import os
-
-###
-### Since the visited links are stored in a salted hash table, it is not possible
-### to extract the item of the hash table. It only possible to verify if a given
-### list is in the hash table.
-###
-
-
 currentDirectory = os.path.dirname(os.path.realpath(__file__))
 parentDirectory = os.path.dirname(currentDirectory)
 sys.path.append(parentDirectory)
 
-import chromagnonHistory
-import chromagnonDownload
+import chromagnonSession
 
 class main_window(TkinterDnD.Tk):
     def __init__(self):
         TkinterDnD.Tk.__init__(self)
         self.geometry("800x600")
-        self.title("Chromagnon History and Downloads Viewer")
+        self.title("Chromagnon Session Viewer")
         treeviewStyle = ttk.Style()
         treeviewStyle.configure("Treeview", 
                 background="white")
         treeviewStyle.map("Treeview",
                 background=[('selected', 'blue')])
-
-        instructionLabel = Label(self, text="Drag and drop History file into window")
+        
+        instructionLabel = Label(self, text="Drag and drop Session or Tab file into window")
         instructionLabel.pack()
 
         treeFrame = Frame(self)
@@ -62,26 +53,30 @@ class main_window(TkinterDnD.Tk):
         self.dataTable.dnd_bind("<<Drop>>", self.processFileUpload)
         self.dataTable.pack()
 
+    ## Function to remove all records when necessary
+    def removeRecords(self):
+        for record in self.dataTable.get_children():
+            self.dataTable.delete(record)
 
-    ## Process file when uploaded via GUI
+    ## Handle uploading of SNSS files
     def processFileUpload(self, event):
+        ## We remove all records in the event that the user
+        ## has already uploaded a file, but uploads a second one.
+        self.removeRecords()
+
+        ## Take the path of the file, parse the file
+        ## Display the data.
         filePath = event.data
         if filePath[0] == '{' and filePath[-1] == '}':
             filePath=filePath[1:-1]
-
-        ## Parse files and combine the output.
-        historyParse = chromagnonHistory.guiParse(filePath)
-        downloadParse = chromagnonDownload.guiParse(filePath)
-        combinedOutput = historyParse + downloadParse
-        
-        ## Sort output by date
-        combinedOutput.sort(key=lambda x: x[0])
-
-
-        ## Load and sort output into table
+        sessionParse = chromagnonSession.guiParse(filePath)
         self.count = 0
         self.sessionEntry = 0
-        for record in combinedOutput:
+
+        ## At the current time sessionParse returns raw data
+        ## from the SNSS files. This will likely be changed and
+        ## Parses more intentionally at a later time.
+        for record in sessionParse:
             self.dataTable.insert(parent='', index='end', iid=self.count, text=self.sessionEntry,
                                   values=(record,))
             self.count += 1
