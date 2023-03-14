@@ -50,6 +50,7 @@ def guiParse(path):
     output.append(header)
     for item in data:
         line = []
+        line.append("Download Event")
         for column in columns:
             line.append(item.columnToStr(column))
         output.append(line)
