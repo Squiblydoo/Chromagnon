@@ -61,7 +61,7 @@ def parse(filename, urlLength):
                               total_bytes, \
                               danger_type, \
                               referrer, \
-                              tab_url,  \
+                              tab_referrer_url,  \
                               state \
                               FROM downloads;")
 
@@ -80,6 +80,7 @@ class DownloadEntry(object):
                   'pt': "percentReceived",
                   'dt': "danger_type",
                   'rf': "referrer",
+                  'tr': "tabReferrer",
                   's': "state"}
                   
     STATE_STR = ["In Progress",
@@ -134,6 +135,7 @@ class DownloadEntry(object):
         else:
             self.percentReceived = "%d%%" % \
                                    int(float(item[4])/float(item[5])*100)
+        self.tabReferrer = item[8]
 
     def columnToStr(self, column):
         """Returns column content specified by argument"""
