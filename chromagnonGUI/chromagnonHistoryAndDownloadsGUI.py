@@ -21,7 +21,7 @@ sys.path.append(parentDirectory)
 
 import chromagnonHistory
 import chromagnonDownload
-import chromagnonAbout
+import chromagnonGUI.chromagnonAbout
 
 class main_window(TkinterDnD.Tk):
     def __init__(self):
@@ -62,6 +62,7 @@ class main_window(TkinterDnD.Tk):
         ## Create a menu for copying using right-click
         self.popupMenu = Menu(self.dataTable, tearoff=0)
         self.popupMenu.add_command(command=self.copyFromTreeview, label="Copy")
+        self.dataTable.bind('<Button-2>', self.handlePopUpMenu )
         self.dataTable.bind('<Button-3>', self.handlePopUpMenu )
 
         ## Design table
@@ -108,49 +109,50 @@ class main_window(TkinterDnD.Tk):
 
         ## Load and sort output into table
         self.count = 0
-        self.sessionEntry = 0
+        self.recordEntry = 0
         for record in combinedOutput:
             if record[0] == "Download Event":
-                self.dataTable.insert(parent='', index='end', iid=self.count, text=self.sessionEntry,
+                self.dataTable.insert(parent='', index='end', iid=self.count, text=self.recordEntry,
                                     values=(record[1], "Download", Path(record[4]).name, record[3]),
                                     tags=("DownloadHighlight",))
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 1, index='end', iid=self.count , text = self.sessionEntry,
+                self.dataTable.insert(parent=self.count - 1, index='end', iid=self.count , text = self.recordEntry,
                                       values=(record[1], "Referrer: ", "--------------------->" , record[2]),
                                     tags=("DownloadHighlight",))
+                
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 2, index='end', iid=self.count , text = self.sessionEntry,
+                self.dataTable.insert(parent=self.count - 2, index='end', iid=self.count , text = self.recordEntry,
+                                      values=(record[1], "Ref Tab Url: ", "--------------------->" , record[7]),
+                                    tags=("DownloadHighlight",))
+                self.count += 1
+                self.dataTable.insert(parent=self.count - 3, index='end', iid=self.count , text = self.recordEntry,
                                       values=(record[1], "Disposition: ", record[6]),
                                     tags=("DownloadHighlight",))
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 3, index='end', iid=self.count , text = self.sessionEntry,
+                self.dataTable.insert(parent=self.count - 4, index='end', iid=self.count , text = self.recordEntry,
                                       values=(record[1], "State: ", record[5]),
                                     tags=("DownloadHighlight",))
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 4, index='end', iid=self.count , text = self.sessionEntry,
-                                      values=(record[1], "State: ", record[6]),
-                                    tags=("DownloadHighlight",))
-                self.count += 1
-                self.dataTable.insert(parent=self.count - 5, index='end', iid=self.count , text = self.sessionEntry,
+                self.dataTable.insert(parent=self.count - 5, index='end', iid=self.count , text = self.recordEntry,
                                       values=(record[1], "File Path: ", record[4]),
                                     tags=("DownloadHighlight",))
                 
                 self.count += 1
-                self.sessionEntry += 1
+                self.recordEntry += 1
             elif record[0] == "History Event":
-                self.dataTable.insert(parent='', index='end', iid=self.count, text=self.sessionEntry,
+                self.dataTable.insert(parent='', index='end', iid=self.count, text=self.recordEntry,
                                     values=(record[1], "History", record[4] , record[5],),
                                     tags=("HistoryHighlight",))
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 1, index='end', iid=self.count , text = self.sessionEntry,
+                self.dataTable.insert(parent=self.count - 1, index='end', iid=self.count , text = self.recordEntry,
                                       values=(record[1], "Transition: ", record[3]))
                 
                 self.count += 1
-                self.dataTable.insert(parent=self.count - 2, index='end', iid=self.count , text = self.sessionEntry,
+                self.dataTable.insert(parent=self.count - 2, index='end', iid=self.count , text = self.recordEntry,
                                       values=(record[1], "Visit Count: ", record[2]))
                 
                 self.count += 1
-                self.sessionEntry += 1
+                self.recordEntry += 1
                 
 
     def showAbout(self):

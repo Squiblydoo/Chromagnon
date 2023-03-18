@@ -42,7 +42,7 @@ import chromagnon.downloadParse
 
 def guiParse(path):
     data = chromagnon.downloadParse.parse(path, int(0))
-    columns = ["st", "rf","u", "p", "s", "dt"]
+    columns = ["st", "rf","u", "p", "s", "dt", "tr"]
     output = []
     header = []
     for columnHeader in columns:

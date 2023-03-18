@@ -13,7 +13,7 @@ parentDirectory = os.path.dirname(currentDirectory)
 sys.path.append(parentDirectory)
 
 import chromagnonSession
-import chromagnonAbout
+import chromagnonGUI.chromagnonAbout
 
 class main_window(TkinterDnD.Tk):
     def __init__(self):
