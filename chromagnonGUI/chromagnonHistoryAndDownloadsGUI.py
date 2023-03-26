@@ -30,7 +30,7 @@ class main_window(TkinterDnD.Tk):
         self.title("Chromagnon History and Downloads Viewer")
         treeviewStyle = ttk.Style()
         treeviewStyle.configure("Treeview", 
-                background="white")
+                background="self[background]", foreground="self[foreground]")
         treeviewStyle.map("Treeview",
                 background=[('selected', 'blue')])
         
@@ -68,10 +68,10 @@ class main_window(TkinterDnD.Tk):
         ## Design table
         self.dataTable['columns'] = ('Event Time', 'Event Type', 'Title/Download', 'URL' )
 
-        self.dataTable.column("#0", width=60, minwidth = 25)
-        self.dataTable.column("Event Time", width=150)
-        self.dataTable.column("Event Type", width=90)
-        self.dataTable.column("Event Time", width=150)
+        self.dataTable.column("#0", width=60, minwidth = 50)
+        self.dataTable.column("Event Time", width=150,minwidth = 150)
+        self.dataTable.column("Event Type", width=90, minwidth = 90)
+        self.dataTable.column("Title/Download", width=150, minwidth = 150)
         self.dataTable.column("URL", width=2000)
 
         ## Headings
@@ -90,10 +90,18 @@ class main_window(TkinterDnD.Tk):
         self.dataTable.drop_target_register(DND_FILES)
         self.dataTable.dnd_bind("<<Drop>>", self.processFileUpload)
         self.dataTable.pack(expand=True)
-
+        
+    ## Function to remove all records when necessary
+    def removeRecords(self):
+        for record in self.dataTable.get_children():
+            self.dataTable.delete(record)
 
     ## Process file when uploaded via GUI
     def processFileUpload(self, event):
+        ## We remove all records in the event that the user
+        ## has already uploaded a file, but uploads a second one.
+        self.removeRecords()
+
         filePath = event.data
         if filePath[0] == '{' and filePath[-1] == '}':
             filePath=filePath[1:-1]
