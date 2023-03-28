@@ -1,6 +1,6 @@
 Chromagnon is a set of small tools dedicated to Chrome/Chromium forensics.
 
-The tools are used with the CLI, but a separate branch "GUI" is being used to create GUI elements for each tool including a combined GUI. The GUI is preferred for ease of use and will be merged into the main branch at a later date.
+The tools are used with the CLI, but a GUI is being create to created for each tool including a combined GUI. The GUI is preferred for ease of use.
 
 ## Tools
 * `chromagnonHistory.py` parses **Chrome History** file ... [learn more](https://github.com/JRBANCEL/Chromagnon/wiki/ChromagnonHistory-=-chromagnonHistory.py)
@@ -10,17 +10,20 @@ The tools are used with the CLI, but a separate branch "GUI" is being used to cr
 * `chromagnonSession.py` parses **Session_...** files 
 * `chromagnonTab.py` parses **Tab_...** files
 
+## How to Use
+To launch the gui, execute `python chromagnonGui.py`. Two tools are currently available:
+* History and Download Viewer - This parses and produces an output of a history file. The history file can be drag and dropped into the viewer.
+* Session and Tab Viewer - This parses and produces a raw output of a Chromium Session or Tab file. (Note: Work still needs to be done to ensure all session commands are accounted for and the data needs to be processed to increase its usefulness.
+
+
 ## Requirements 
 * Python 3 - No other dependencies are needed.
 
-## Remarks from original project - I don't know if they are still true or not
-* Most of the code is Endianness dependant and tested only on little endian hosts
-* The code is alignment dependant. If Chrome was compiled with custom alignment flags, it probably won't work.
 
 ## Work In Progress
 The original creator was working on reverse engineering SNSS file format : [see this page](https://github.com/JRBANCEL/Chromagnon/wiki/Reverse-Engineering-SSNS-Format) for details. I (Squiblydoo) am actively reverse engineering the SNSS format and including additional support for SNSS commands in the parser and will likely provide my tools for reverse engineering the commands at a later point.
 
-I've created a pattern for the hex editor [ImHex](https://github.com/WerWolv/ImHex) which highlights each SNSS command. This is substiantially speeding up the reversing process. However, it appears not all SNSS commands are forensically interesting so some may be excluded from default output at a later time. (Update: someone pointed me to the [source code for the SNSS commands](https://source.chromium.org/chromium/chromium/src/+/main:components/sessions/core/session_service_commands.cc;l=28;drc=38321ee39cd73ac2d9d4400c56b90613dee5fe29), which should speed up this process!)
+I've created a pattern for the hex editor [ImHex](https://github.com/WerWolv/ImHex) which highlights each SNSS command. My hex pattern is attached to this project: `snss.hexpat`. This is substiantially speeding up the reversing process. However, it appears not all SNSS commands are forensically interesting so some may be excluded from default output at a later time. (Update: someone pointed me to the [source code for the SNSS commands](https://source.chromium.org/chromium/chromium/src/+/main:components/sessions/core/session_service_commands.cc;l=28;drc=38321ee39cd73ac2d9d4400c56b90613dee5fe29), which should speed up this process!)
 ![image](https://user-images.githubusercontent.com/77356206/206008380-678d3cac-1fa2-413d-91f0-28ca3d23f9a8.png)
 
 
