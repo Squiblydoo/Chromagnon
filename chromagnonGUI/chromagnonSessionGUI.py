@@ -18,7 +18,7 @@ import chromagnonGUI.chromagnonAbout
 class main_window(TkinterDnD.Tk):
     def __init__(self):
         TkinterDnD.Tk.__init__(self)
-        self.geometry("800x600")
+        self.geometry("1200x600")
         self.title("Chromagnon Session Viewer")
         treeviewStyle = ttk.Style()
         treeviewStyle.configure("Treeview", 
@@ -34,14 +34,18 @@ class main_window(TkinterDnD.Tk):
         self.config(menu=menubar)
 
         
-        instructionLabel = Label(self, text="Drag and drop Session or Tab file into window")
+        instructionLabel = Label(self, \
+                                 text="Drag and drop Session or Tab file into window")
         instructionLabel.pack()
 
         treeFrame = Frame(self)
         treeFrame.pack(pady=20, expand=True, anchor=W)
         verticalScroll = Scrollbar(treeFrame)
         horizontalScroll = Scrollbar(treeFrame, orient='horizontal')
-        self.dataTable = ttk.Treeview(treeFrame, yscrollcommand=verticalScroll.set, xscrollcommand=horizontalScroll.set, height=500)
+        self.dataTable = ttk.Treeview(treeFrame, \
+                                      yscrollcommand=verticalScroll.set,\
+                                      xscrollcommand=horizontalScroll.set, \
+                                      height=500)
         verticalScroll.config(command=self.dataTable.yview)
         horizontalScroll.config(command=self.dataTable.xview)
         verticalScroll.pack(side=RIGHT, fill=Y)
@@ -98,7 +102,10 @@ class main_window(TkinterDnD.Tk):
         ## from the SNSS files. This will likely be changed and
         ## Parses more intentionally at a later time.
         for record in sessionParse:
-            self.dataTable.insert(parent='', index='end', iid=self.count, text=self.sessionEntry,
+            self.dataTable.insert(parent='', 
+                                  index='end', 
+                                  iid=self.count, 
+                                  text=self.sessionEntry,
                                   values=(record,))
             self.count += 1
             self.sessionEntry += 1
