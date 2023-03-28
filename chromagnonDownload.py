@@ -40,6 +40,24 @@ import chromagnon.csvOutput
 import chromagnon.jsonOutput
 import chromagnon.downloadParse
 
+def guiParse(path):
+    data = chromagnon.downloadParse.parse(path, int(0))
+    columns = ["st", "rf","u", "p", "s", "dt", "tr"]
+    output = []
+    header = []
+    for columnHeader in columns:
+        header.append(chromagnon.downloadParse.DownloadEntry.COLUMN_STR[columnHeader])
+    output.append(header)
+    for item in data:
+        line = []
+        line.append("Download Event")
+        for column in columns:
+            line.append(item.columnToStr(column))
+        output.append(line)
+    
+    return output
+
+
 def main():
     parser = argparse.ArgumentParser(
                 formatter_class=argparse.RawDescriptionHelpFormatter,

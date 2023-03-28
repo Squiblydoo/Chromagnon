@@ -60,6 +60,24 @@ class DatetimeAction(argparse.Action):
                 sys.exit(-1)
         setattr(namespace, self.dest, value)
 
+def guiParse(path):
+    data = chromagnon.historyParse.parse(path, datetime.datetime(1601, 1, 1), datetime.datetime.now(),
+                                             False, "", int(0))
+    output = []
+    header = []
+    columnDefault = ["vt", "vc", "tr", "tl", "u"]
+    for columnHeader in columnDefault:
+        header.append(chromagnon.historyParse.HistoryEntry.COLUMN_STR[columnHeader])
+    output.append(header)
+    for item in data:
+        line = []
+        line.append("History Event")
+        for column in columnDefault:
+            line.append(item.columnToStr(column))
+        output.append(line)
+
+    return output
+
 def main():
     # Dirty !!!!!!!!!!!
     #reload(sys)

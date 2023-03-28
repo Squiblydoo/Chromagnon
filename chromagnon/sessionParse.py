@@ -359,8 +359,8 @@ class CommandLastActiveTime():
         self.description = self.__doc__
         
     def __str__(self):
-        return "LastActiveTime (%s) - Window: %s, Time: %s" % \
-            (self.description.strip(), self.windowId, self.lastActiveTime )
+        return "LastActiveTime (%s) - Window: %s, Tab: %s Time: %s" % \
+            (self.description.strip(), self.windowId, self.tabId, self.lastActiveTime )
 
 
 

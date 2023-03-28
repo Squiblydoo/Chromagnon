@@ -34,6 +34,19 @@ import textwrap
 import chromagnon.SNSSParse
 import chromagnon.sessionParse
 
+def guiParse(path):
+    snss = chromagnon.SNSSParse.parse(path)
+    # Parse Retrived data
+    sessionCommand = chromagnon.sessionParse.parse(snss)
+
+    # returnData output
+    output = []
+    for command in sessionCommand:
+        output.append(command)
+
+    return output
+
+
 def main():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawDescriptionHelpFormatter,
