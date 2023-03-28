@@ -2,7 +2,7 @@
 
 Chromagnon is a set of tools dedicated to Chrome/Chromium forensics.
 
-The tools are used with the CLI, but a GUI is being create to created for each tool including a combined GUI. The GUI is preferred for ease of use.
+The tools are used with the CLI, but a GUI is being created for each tool including a combined GUI. The GUI is preferred for ease of use.
 
 The tools are used with the CLI, but a separate branch "GUI" is being used to create GUI elements for each tool including a combined GUI.
 The GUI is preferred for ease of use and will be merged into the main branch at a later date.
