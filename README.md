@@ -1,4 +1,6 @@
-Chromagnon is a set of small tools dedicated to Chrome/Chromium forensics.
+![chromagnon_512](https://user-images.githubusercontent.com/77356206/228214907-c973f2d3-c784-4ab7-a869-3f5df5afe39b.png)
+
+Chromagnon is a set of tools dedicated to Chrome/Chromium forensics.
 
 The tools are used with the CLI, but a GUI is being create to created for each tool including a combined GUI. The GUI is preferred for ease of use.
 
