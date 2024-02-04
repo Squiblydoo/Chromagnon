@@ -30,6 +30,9 @@ import argparse
 import sys
 import textwrap
 
+from pathlib import Path
+import re 
+import datetime
 
 import chromagnon.SNSSParse
 import chromagnon.sessionParse
@@ -86,6 +89,24 @@ def main():
 
     # Print data based on SNSS Commands
     output = []
+
+    # Parse timestamp from file name
+    try:
+        filename = Path(args.filename).stem
+        match = re.search(r'\d+$', filename )
+
+        if match:
+            timestamp = int(match.group())
+            epoch_start = datetime.datetime(1601,1,1)
+            delta = datetime.timedelta(microseconds=int(timestamp))
+            human_readable_time = epoch_start + delta
+        print(f"File Name: {filename}")
+        print(f"Timestamp: {timestamp}")
+        print(f"Human Readable Time: {human_readable_time} UTC")
+
+    except Exception as e:
+        print( e)
+    
     for command in sessionCommand:
         
         print(command)

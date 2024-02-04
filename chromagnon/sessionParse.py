@@ -354,8 +354,8 @@ class CommandLastActiveTime():
         self.tabId = struct.unpack(types.uint32, content.read(4))[0]
         self.lastActiveTime = struct.unpack(types.int64, content.read(8))[0]
 
-        # I'm not sure that this time is accurate or what it is offset from.
-        self.lastActiveTime = datetime.timedelta(microseconds=self.lastActiveTime/1000)
+        
+        self.lastActiveTime = datetime.datetime(1601, 1, 1) + datetime.timedelta(microseconds=self.lastActiveTime)
         self.description = self.__doc__
         
     def __str__(self):
