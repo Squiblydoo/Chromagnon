@@ -62,7 +62,7 @@ TYPE_DICT = {'0': "CommandSetTabWindow",
              '16': "CommandTabClosed",
              '17': "CommandWindowClosed",
 #            '18': "CommandSetTabUserAgentOverride", # OBSOLETE
-             #'19': "CommandSessionStorageAssociated",
+             '19': "CommandSessionStorageAssociated",
              '20': "CommandSetActiveWindow",
              '21': "CommandLastActiveTime",
 #            '22': "CommandSetWindowWorkspace" # OBSOLETE
@@ -297,17 +297,17 @@ class CommandSetPinnedState():
 
 class CommandSetExtensionAppID():
     """
-    TODO
+    Associates a tab with an extension app.
     """
     def __init__(self, content):
-
-        self.tabId = struct.unpack(types.uint32, content.read(4))[0]
-        self.appId = struct.unpack(types.int64, content.read(8))[0]
-
+        content = pickle.Pickle(content)
+        self.tabId = content.readInt()
+        self.extensionAppId = content.readString()
+        self.description = self.__doc__
 
     def __str__(self):
-        return "SetExtensionAppID - Tab: %d, " % self.tabId +\
-               "Extension: %d" % self.appId
+        return "SetExtensionAppID - Tab: %d, Extension: %s" % \
+               (self.tabId, self.extensionAppId)
 
 class CommandSetWindowBounds3():
     """
@@ -366,23 +366,18 @@ class CommandLastActiveTime():
 
 class CommandAddTabExtraData():
     """
-    Extra tab data such as side search.
+    Adds extra key-value data to a tab.
     """
     def __init__(self, content):
         content = pickle.Pickle(content)
         self.tabId = content.readInt()
-        self.index = content.readInt()
-        self.profile = content.readInt()
-        self.sideSearchTitle = content.readString16()
-        self.something = content.readShort()
-        self.somethingShort = content.readChar()
-        self.enabledBool = content.readBool()
-        self.url = content.readString()
+        self.key = content.readString()
+        self.extraData = content.readString()
         self.description = self.__doc__
 
     def __str__(self):
-        return "CommandAddTabExtraData (%s) - Tab: %d, Index: %d, Url: %s" % \
-            (self.description.strip(), self.tabId, self.index, self.url.strip())
+        return "AddTabExtraData (%s) - Tab: %d, Key: %s, Data: %s" % \
+            (self.description.strip(), self.tabId, self.key, self.extraData)
 
 class CommandSetWindowWorkspace2():
     """
@@ -414,4 +409,201 @@ class CommandSessionStorageAssociated():
         return "SessionStorageAssociated (%s) - Session Id: %d, Storage Namespace: %s" %\
             (self.description.strip(), self.sessionId, self.storageNamespace)
 
-    
+
+class CommandSetWindowAppName():
+    """
+    Sets the app name for a window.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.windowId = content.readInt()
+        self.appName = content.readString()
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetWindowAppName (%s) - Window: %d, App Name: %s" % \
+               (self.description.strip(), self.windowId, self.appName)
+
+
+class CommandSetActiveWindow():
+    """
+    Sets the active/focused window.
+    """
+    def __init__(self, content):
+        # ActiveWindowPayload = SessionID::id_type = int32 (4 bytes)
+        self.windowId = struct.unpack(types.int32, content.read(4))[0]
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetActiveWindow (%s) - Window: %d" % \
+               (self.description.strip(), self.windowId)
+
+
+class CommandTabNavigationPathPruned():
+    """
+    Updates the navigation path for a tab (pruned from back and front).
+    """
+    def __init__(self, content):
+        # TabNavigationPathPrunedPayload: int32 id, int32 index, int32 count (12 bytes)
+        self.tabId = struct.unpack(types.int32, content.read(4))[0]
+        self.index = struct.unpack(types.int32, content.read(4))[0]
+        self.count = struct.unpack(types.int32, content.read(4))[0]
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "TabNavigationPathPruned (%s) - Tab: %d, Index: %d, Count: %d" % \
+               (self.description.strip(), self.tabId, self.index, self.count)
+
+
+class CommandSetTabGroup():
+    """
+    Sets the tab group for a tab (or removes it from a group).
+    """
+    def __init__(self, content):
+        # TabGroupPayload: int32 tab_id (offset 0), 4 bytes padding,
+        # uint64 group_id_high (offset 8), uint64 group_id_low (offset 16)
+        # Total: 24 bytes
+        self.tabId = struct.unpack(types.int32, content.read(4))[0]
+        content.read(4)  # alignment padding
+        self.groupIdHigh = struct.unpack(types.uint64, content.read(8))[0]
+        self.groupIdLow = struct.unpack(types.uint64, content.read(8))[0]
+        self.description = self.__doc__
+
+    def __str__(self):
+        if self.groupIdHigh == 0 and self.groupIdLow == 0:
+            return "SetTabGroup (%s) - Tab: %d (no group)" % \
+                   (self.description.strip(), self.tabId)
+        return "SetTabGroup (%s) - Tab: %d, Group: %016x%016x" % \
+               (self.description.strip(), self.tabId, self.groupIdHigh, self.groupIdLow)
+
+
+class CommandSetTabGroupMetadata2():
+    """
+    Sets the visual metadata (title, color, collapsed state) for a tab group.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        # Pickle: uint64 group_id_high, uint64 group_id_low, string16 title,
+        #         uint32 color, bool is_collapsed
+        self.groupIdHigh = content.readUInt64()
+        self.groupIdLow = content.readUInt64()
+        self.title = content.readString16()
+        self.color = content.readUInt32()
+        try:
+            self.isCollapsed = content.readBool()
+        except Exception:
+            self.isCollapsed = False
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetTabGroupMetadata2 (%s) - Group: %016x%016x, Title: %s, Color: %d" % \
+               (self.description.strip(), self.groupIdHigh, self.groupIdLow,
+                self.title, self.color)
+
+
+class CommandSetTabGuid():
+    """
+    Sets the GUID for a tab.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.tabId = content.readInt()
+        self.guid = content.readString()
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetTabGuid (%s) - Tab: %d, GUID: %s" % \
+               (self.description.strip(), self.tabId, self.guid)
+
+
+class CommandSetTabUserAgentOverride2():
+    """
+    Sets the user agent override for a tab, including optional UA metadata.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.tabId = content.readInt()
+        self.userAgentOverride = content.readString()
+        try:
+            self.hasUaMetadata = content.readBool()
+            if self.hasUaMetadata:
+                self.opaqueUaMetadata = content.readString()
+            else:
+                self.opaqueUaMetadata = None
+        except Exception:
+            self.hasUaMetadata = False
+            self.opaqueUaMetadata = None
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetTabUserAgentOverride2 (%s) - Tab: %d, UA: %s" % \
+               (self.description.strip(), self.tabId, self.userAgentOverride)
+
+
+class CommandSetTabData():
+    """
+    Sets arbitrary key-value data for a tab.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.tabId = content.readInt()
+        count = content.readInt()
+        self.data = {}
+        for _ in range(count):
+            key = content.readString()
+            value = content.readString()
+            if key is not None:
+                self.data[key] = value
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetTabData (%s) - Tab: %d, Data: %s" % \
+               (self.description.strip(), self.tabId, str(self.data))
+
+
+class CommandSetWindowUserTitle():
+    """
+    Sets the user-defined title for a window.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.windowId = content.readInt()
+        self.userTitle = content.readString()
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetWindowUserTitle (%s) - Window: %d, Title: %s" % \
+               (self.description.strip(), self.windowId, self.userTitle)
+
+
+class CommandSetWindowVisibleOnAllWorkspaces():
+    """
+    Sets whether a window is visible on all workspaces.
+    """
+    def __init__(self, content):
+        # VisibleOnAllWorkspacesPayload: int32 window_id (offset 0),
+        # bool visible (offset 4, 1 byte + 3 bytes padding) = 8 bytes total
+        self.windowId = struct.unpack(types.int32, content.read(4))[0]
+        visible_bytes = content.read(4)  # 1 byte bool + 3 bytes alignment padding
+        self.visibleOnAllWorkspaces = bool(visible_bytes[0]) if visible_bytes else False
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "SetWindowVisibleOnAllWorkspaces (%s) - Window: %d, Visible: %s" % \
+               (self.description.strip(), self.windowId, self.visibleOnAllWorkspaces)
+
+
+class CommandAddWindowExtraData():
+    """
+    Adds extra key-value data to a window.
+    """
+    def __init__(self, content):
+        content = pickle.Pickle(content)
+        self.windowId = content.readInt()
+        self.key = content.readString()
+        self.extraData = content.readString()
+        self.description = self.__doc__
+
+    def __str__(self):
+        return "AddWindowExtraData (%s) - Window: %d, Key: %s, Data: %s" % \
+               (self.description.strip(), self.windowId, self.key, self.extraData)

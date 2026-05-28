@@ -49,7 +49,7 @@ list is in the hash table.
              '''),
              epilog=textwrap.dedent('''
 [Examples]
-     > python chromagnonVisitedKinks.py ".config/chromium/Default/Visited Links" "http://www.google.fr/"
+     > python chromagnonVisitedLinks.py ".config/chromium/Default/Visited Links" "http://www.google.fr/"
                      '''))
     parser.add_argument("visited_links_file", action='store',
                         help="Path to Chrome Visited Links File")

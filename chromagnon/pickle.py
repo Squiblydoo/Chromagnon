@@ -55,7 +55,8 @@ class Pickle():
 #              (self.dataSize, self.payloadSize, self.payloadStart)
 
     def readBool(self):
-        return struct.unpack(types.bool8, self.data.read(1))[0]
+        """Reading Bool as 4-byte int (Chrome Pickle stores bools as int32)"""
+        return struct.unpack(types.uint32, self.data.read(4))[0] != 0
 
     def readChar(self):
         return struct.unpack(types.uint8, self.data.read(1))[0]
@@ -75,16 +76,35 @@ class Pickle():
         # XXX Some Length are two big...
         if length > self.dataSize - self.data.tell():
             return None
-        return self.data.read(length).decode('utf-8', 'ignore')
+        result = self.data.read(length)
+        # Consume alignment padding to the next 4-byte boundary
+        remainder = length % 4
+        if remainder:
+            self.data.read(4 - remainder)
+        return result.decode('utf-8', 'ignore')
 
     def readString16(self):
         """Reading String on 16bits"""
-        # Reading String length
+        # Reading String length (number of characters)
         length = self.readInt()
+        byte_length = length * 2
         # XXX Some Length are two big...
-        if length * 2 > self.dataSize - self.data.tell():
+        if byte_length > self.dataSize - self.data.tell():
             return None
-        return self.data.read(length*2).decode('utf-16', 'ignore')
+        result = self.data.read(byte_length)
+        # Consume alignment padding to the next 4-byte boundary
+        remainder = byte_length % 4
+        if remainder:
+            self.data.read(4 - remainder)
+        return result.decode('utf-16', 'ignore')
 
     def readDouble(self):
         return struct.unpack(types.int64, self.data.read(8))[0]
+
+    def readUInt32(self):
+        """Reading unsigned 32-bit integer"""
+        return struct.unpack(types.uint32, self.data.read(4))[0]
+
+    def readUInt64(self):
+        """Reading unsigned 64-bit integer"""
+        return struct.unpack(types.uint64, self.data.read(8))[0]
