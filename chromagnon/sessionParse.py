@@ -91,6 +91,30 @@ WINDOW_SHOW_STATE = {
     6 : 'end'
 }
 
+# Transition type constants from ui/base/page_transition_types.h
+TRANSITION_CORE = {
+    0: 'link', 1: 'typed', 2: 'auto bookmark', 3: 'auto subframe',
+    4: 'manual subframe', 5: 'generated', 6: 'start page',
+    7: 'form submit', 8: 'reload', 9: 'keyword', 10: 'keyword generated',
+}
+TRANSITION_QUALIFIERS = {
+    0x00800000: 'Blocked',
+    0x01000000: 'Forward/Back',
+    0x02000000: 'From Address Bar',
+    0x04000000: 'Home Page',
+    0x08000000: 'From API',
+    0x10000000: 'Chain Start',
+    0x20000000: 'Chain End',
+    0x40000000: 'Client Redirect',
+    0x80000000: 'Server Redirect',
+}
+
+def decode_transition(raw):
+    """Decode a Chrome page transition bitmask into a human-readable string."""
+    core = TRANSITION_CORE.get(raw & 0xFF, 'unknown(%d)' % (raw & 0xFF))
+    quals = [label for mask, label in TRANSITION_QUALIFIERS.items() if raw & mask]
+    return '; '.join([core] + quals)
+
 
 def parse(commandList):
     """
@@ -189,38 +213,62 @@ class CommandWindowClosed():
 
 class CommandTabNavigationPathPrunedFromBack():
     """
-    TODO
+    Prunes navigation history entries from the back of a tab's stack.
     """
     def __init__(self, content):
-        # Content is Tab ID on 8bits and Index on 32bits
-        self.tabId = struct.unpack(types.uint8, content.read(1))[0]
-        # XXX Strange results...
-        self.index = 0#struct.unpack(types.int32, content.read(4))[0]
+        # TabNavigationPathPrunedFromBackPayload: int32 id, int32 count
+        self.tabId = struct.unpack(types.int32, content.read(4))[0]
+        self.count = struct.unpack(types.int32, content.read(4))[0]
+        self.description = self.__doc__
 
     def __str__(self):
-        return "TabNavigationPathPrunedFromBack - Tab: %d, Index: %d" % \
-               (self.tabId, self.index)
+        return "TabNavigationPathPrunedFromBack (%s) - Tab: %d, Count: %d" % \
+               (self.description.strip(), self.tabId, self.count)
 
 class CommandUpdateTabNavigation():
     """
-    Update Tab information
+    Update Tab navigation entry
     """
     def __init__(self, content):
         content = pickle.Pickle(content)
-        self.tabId = content.readInt()
-        self.index = content.readInt()
-        self.url = content.readString()
-        #self.title = content.readString16()
+        self.tabId          = content.readInt()
+        self.index          = content.readInt()
+        self.url            = content.readString()
+        self.title          = content.readString16()
+        self.page_state_raw = content.readString()   # raw PageState protobuf blob
+        self.transition     = content.readInt()
+        type_mask           = content.readInt()
+        self.has_post_data  = bool(type_mask & 0x1)
+        try:
+            self.referrer_url             = content.readString()
+            self.referrer_policy          = content.readInt()
+            self.original_request_url     = content.readString()
+            self.is_overriding_user_agent = content.readBool()
+            self.timestamp                = content.readDouble()  # int64 microseconds since 1601-01-01
+            self.http_status_code         = content.readInt()
+        except Exception:
+            self.referrer_url = self.original_request_url = ''
+            self.referrer_policy = self.http_status_code = None
+            self.is_overriding_user_agent = False
+            self.timestamp = None
         self.description = self.__doc__
-        
-        #print("State:", content.readString())
-        #print("Transition:", (0xFF & content.readInt()))
-        # Content is Window ID on 8bits and Tab ID on 8bits
-        # Strange alignment : two uint8 takes 8Bytes...
 
     def __str__(self):
-        return "UpdateTabNavigation (%s)- Tab: %d,  Index: %d, Url: %s" % \
-               (self.description.strip(), self.tabId, self.index, self.url)
+        ts = ''
+        if self.timestamp:
+            try:
+                ts = str(datetime.datetime(1601, 1, 1) +
+                         datetime.timedelta(microseconds=self.timestamp))
+            except (OverflowError, ValueError):
+                ts = repr(self.timestamp)
+        return ("UpdateTabNavigation (%s) - Tab: %d, Index: %d, "
+                "URL: %s, Title: %s, "
+                "Transition: %s, Timestamp: %s, "
+                "HTTP: %s, HasPOST: %s" % (
+                    self.description.strip(), self.tabId, self.index,
+                    self.url, self.title,
+                    decode_transition(self.transition), ts,
+                    self.http_status_code, self.has_post_data))
 
 class CommandSetSelectedNavigationIndex():
     """
@@ -268,17 +316,17 @@ class CommandSetWindowType():
 
 class CommandTabNavigationPathPrunedFromFront():
     """
-    TODO
+    Prunes navigation history entries from the front of a tab's stack.
     """
     def __init__(self, content):
-        # Content is Tab ID on 8bits and Count on 32bits
-        # But due to alignment Tab ID is on 32bits
-        self.tabId = struct.unpack(types.uint32, content.read(4))[0]
-        self.count = struct.unpack(types.uint32, content.read(4))[0]
+        # TabNavigationPathPrunedFromFrontPayload: int32 id, int32 count
+        self.tabId = struct.unpack(types.int32, content.read(4))[0]
+        self.count = struct.unpack(types.int32, content.read(4))[0]
+        self.description = self.__doc__
 
     def __str__(self):
-        return "TabNavigationPathPrunedFromFront - Tab: %d, Count: %d" % \
-               (self.tabId, self.count)
+        return "TabNavigationPathPrunedFromFront (%s) - Tab: %d, Count: %d" % \
+               (self.description.strip(), self.tabId, self.count)
 
 class CommandSetPinnedState():
     """
@@ -359,8 +407,8 @@ class CommandLastActiveTime():
         self.description = self.__doc__
         
     def __str__(self):
-        return "LastActiveTime (%s) - Window: %s, Tab: %s Time: %s" % \
-            (self.description.strip(), self.windowId, self.tabId, self.lastActiveTime )
+        return "LastActiveTime (%s) - Window: %s, Tab: %s Time: %s (TimeTicks — wall-clock approximate)" % \
+            (self.description.strip(), self.windowId, self.tabId, self.lastActiveTime)
 
 
 

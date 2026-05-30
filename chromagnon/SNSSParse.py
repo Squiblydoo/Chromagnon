@@ -32,6 +32,7 @@ Reverse engineered from chrome/browser/sessions/*
 
 import os
 import struct
+import sys
 
 import chromagnon.types as types
 
@@ -58,15 +59,17 @@ def parse(path):
             commandSize = struct.unpack(types.uint16, f.read(2))[0]
             if commandSize == 0:
                 raise Exception("Corrupted File!")
-            # idType is a uint8; B represents an unsigned char 
+            # idType is a uint8; B represents an unsigned char
             idType = struct.unpack(types.uint8, f.read(1))[0]
-            
+
             # Size of idType is included in commandSize
             content = f.read(commandSize - 1)
             output.append(SNSSCommand(idType, content))
         f.close()
-    except:
-        pass
+    except struct.error:
+        pass  # normal EOF or short read at end of file
+    except Exception as e:
+        print("Warning: parse stopped at offset %d: %s" % (f.tell(), e), file=sys.stderr)
 
     return output
 
